@@ -35,7 +35,7 @@ public class CategoriaServices {
             
             return categorias;
         } catch (Exception e) {
-            throw new RuntimeException("No se pudo Obtener la categorias de la base de datos");
+            throw new RuntimeException("No se pudo Obtener la categorias de la base de datos " + e.getMessage());
         } finally {
             session.close();
         }
