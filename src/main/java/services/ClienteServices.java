@@ -8,7 +8,6 @@ import Configurations.HibernateUtil;
 import java.util.List;
 import models.Cliente;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 

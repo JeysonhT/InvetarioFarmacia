@@ -66,7 +66,7 @@ public class Producto {
 
     @Override
     public String toString() {
-        return nombre + ", indicaciones=" + indicaciones + ", marca=" + marca + ", precio=" + precio + ", cantidad=" + cantidad + ", fecha_vencimiento=" + fecha_vencimiento.toString();
+        return nombre + ", idCategoria: " + categoria_id +", C$:" + precio + ", Caducidad:" + fecha_vencimiento.toString();
     }
 
 

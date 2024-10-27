@@ -119,6 +119,30 @@ public class ProductoService {
             return resultado;
         } catch(Exception e){
             throw new RuntimeException("Error al obtener la cantidad de productos");
+        } finally {
+            session.close();
+        }
+    }
+    
+    public double totalCordobasInvetario(){
+        
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction;
+        
+        String sql = "CALL totalCordobasInventario()";
+        try{
+            
+            transaction = session.beginTransaction();
+            NativeQuery<Integer> query = session.createNativeQuery(sql, Integer.TYPE);
+            Integer resultado = query.getResultList().get(0);
+            
+            transaction.commit();
+            
+            return resultado;
+        } catch(Exception e){
+            throw new RuntimeException("Error en la consulta: " + e.getMessage());
+        } finally{
+            session.close();
         }
     }
 
