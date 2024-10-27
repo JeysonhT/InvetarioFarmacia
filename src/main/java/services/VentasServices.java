@@ -8,6 +8,7 @@ import Configurations.HibernateUtil;
 import models.Ventas;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 
 /**
  *
@@ -19,24 +20,25 @@ public class VentasServices {
 
     }
 
-    public String guardarVentasProducto(Ventas ventas) {
+    public int guardarVentasProducto(Ventas ventas) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
-
-        try {
+        try{
             transaction = session.beginTransaction();
             session.persist(ventas);
+            int key = ventas.getId();
+            
             transaction.commit();
-
-            return "Venta creada: " + ventas.toString();
-        } catch (Exception e) {
-
-            if (transaction != null) {
+            
+            return key;
+                    
+        } catch (Exception e){
+            if(transaction != null){
                 transaction.rollback();
             }
-
-            throw new RuntimeException(e.getMessage());
-        } finally {
+            
+            throw new RuntimeException("Error en la consulta: " + e.getMessage());
+        } finally{
             session.close();
         }
     }

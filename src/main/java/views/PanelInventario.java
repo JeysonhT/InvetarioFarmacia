@@ -6,6 +6,8 @@ package views;
 
 import java.awt.HeadlessException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Categoria;
 import models.Producto;
+import models.Ventas;
+import models.VentasProducto;
 import services.CategoriaServices;
 import services.ProductoService;
+import services.VentasProductosServices;
+import services.VentasServices;
 
 /**
  *
@@ -25,11 +31,13 @@ public class PanelInventario extends javax.swing.JPanel {
 
     private DefaultTableModel tableModel = new DefaultTableModel();
     private DefaultListModel<Producto> listModel = new DefaultListModel<>();
+    private double Subtotal;
 
     /**
      * Creates new form PanelInventario
      */
     public PanelInventario() {
+        this.Subtotal = 0.0;
         initComponents();
         obtenerDatos();
 
@@ -103,9 +111,9 @@ public class PanelInventario extends javax.swing.JPanel {
     private Categoria[] ObtenerArrayCategorias() {
         try {
             List<Categoria> categorias = new CategoriaServices().obtenerCategorias();
-            Categoria[] categoria = new Categoria[categorias.size()-1];
+            Categoria[] categoria = new Categoria[categorias.size() - 1];
 
-            for (int i = 0; i < categorias.size()-1; i++) {
+            for (int i = 0; i < categorias.size() - 1; i++) {
                 categoria[i] = categorias.get(i);
             }
 
@@ -156,14 +164,17 @@ public class PanelInventario extends javax.swing.JPanel {
         txtIdProducto = new javax.swing.JTextField();
         JDialogVenta = new javax.swing.JDialog();
         panelDialogVenta = new javax.swing.JPanel();
-        labelFechaVenta = new javax.swing.JLabel();
-        labelClienteVenta = new javax.swing.JLabel();
+        labelGeneric = new javax.swing.JLabel();
+        labelCliente = new javax.swing.JLabel();
         btnBorrarProductoVenta = new javax.swing.JButton();
-        labelSubTotal = new javax.swing.JLabel();
+        labelSub = new javax.swing.JLabel();
         btnCancelarVenta = new javax.swing.JButton();
         btnAgregarVenta1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListVenta = new javax.swing.JList<>();
+        txtNombreClienteVenta = new javax.swing.JTextField();
+        LabelFecha = new javax.swing.JLabel();
+        jLabelSubTotal = new javax.swing.JLabel();
         jPanelInventario = new javax.swing.JPanel();
         jlabelTotal_Inventario = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -333,31 +344,43 @@ public class PanelInventario extends javax.swing.JPanel {
         panelDialogVenta.setPreferredSize(new java.awt.Dimension(700, 480));
         panelDialogVenta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        labelFechaVenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelFechaVenta.setText("Fecha: ");
-        panelDialogVenta.add(labelFechaVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 205, -1));
+        labelGeneric.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        labelGeneric.setText("Fecha: ");
+        panelDialogVenta.add(labelGeneric, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 70, -1));
 
-        labelClienteVenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelClienteVenta.setText("Cliente: ");
-        panelDialogVenta.add(labelClienteVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 174, -1));
+        labelCliente.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        labelCliente.setText("Cliente: ");
+        panelDialogVenta.add(labelCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 70, -1));
 
         btnBorrarProductoVenta.setText("Borrar Producto");
         panelDialogVenta.add(btnBorrarProductoVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 177, -1));
 
-        labelSubTotal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelSubTotal.setText("SubTotal: ");
-        panelDialogVenta.add(labelSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 147, -1));
+        labelSub.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        labelSub.setText("SubTotal: ");
+        panelDialogVenta.add(labelSub, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 80, -1));
 
         btnCancelarVenta.setText("Cancelar");
         panelDialogVenta.add(btnCancelarVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 177, -1));
 
         btnAgregarVenta1.setText("Procesar Venta");
+        btnAgregarVenta1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarVenta1ActionPerformed(evt);
+            }
+        });
         panelDialogVenta.add(btnAgregarVenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, 177, -1));
 
         jListVenta.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jScrollPane2.setViewportView(jListVenta);
 
         panelDialogVenta.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 700, 330));
+        panelDialogVenta.add(txtNombreClienteVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 110, -1));
+
+        LabelFecha.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        panelDialogVenta.add(LabelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 170, 30));
+
+        jLabelSubTotal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        panelDialogVenta.add(jLabelSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 130, 30));
 
         javax.swing.GroupLayout JDialogVentaLayout = new javax.swing.GroupLayout(JDialogVenta.getContentPane());
         JDialogVenta.getContentPane().setLayout(JDialogVentaLayout);
@@ -610,8 +633,10 @@ public class PanelInventario extends javax.swing.JPanel {
                 }
 
                 Producto producto = new Producto(id, nombre, indicaciones, marca, categoriaId, precio, cantidad, fecha);
-
+                Subtotal += producto.getPrecio();
                 listModel.addElement(producto);
+
+                JOptionPane.showMessageDialog(labelCliente, "producto agragado: " + producto.getNombre());
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(panelDialogVenta,
@@ -624,13 +649,56 @@ public class PanelInventario extends javax.swing.JPanel {
         JDialogVenta.setVisible(true);
         JDialogVenta.setLocationRelativeTo(this);
         JDialogVenta.setSize(700, 480);
+
+        jLabelSubTotal.setText("" + Subtotal);
     }//GEN-LAST:event_btnVentasMouseClicked
+
+    private void btnAgregarVenta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarVenta1ActionPerformed
+        Date fecha = Date.valueOf(LocalDate.now());
+        double total = (Double) Double.parseDouble(jLabelSubTotal.getText());
+        String nombreCliente = "";
+        if(txtNombreClienteVenta.getText().contentEquals("")){
+            nombreCliente = "No registrado";
+        }
+        try {
+            int key = new VentasServices().guardarVentasProducto(new Ventas(fecha, total));
+            JOptionPane.showMessageDialog(labelCliente, "venta id: " + key);
+
+            List<Producto> productos = new ArrayList<>();
+            for (int i = 0; i < jListVenta.getModel().getSize(); i++) {
+                productos.add(jListVenta.getModel().getElementAt(i));
+            }
+
+            List<VentasProducto> listVenta = new ArrayList<>();
+
+            for (Producto p : productos) {
+                listVenta.add(new VentasProducto(key,
+                        p.getId(), 1, p.getPrecio()));
+            }
+
+            String response = new VentasProductosServices().crearVentasProductos(listVenta);
+
+            JOptionPane.showMessageDialog(labelCliente, response);
+            
+            Subtotal = 0.0;
+            
+            jLabelSubTotal.setText("");
+            
+            listModel.clear();
+            
+            obtenerDatos();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(labelCliente, e.getMessage());
+        }
+    }//GEN-LAST:event_btnAgregarVenta1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog JDialogVenta;
     private javax.swing.JTable JTableProductos;
     private javax.swing.JLabel LabelBtnGuardarProducto;
+    private javax.swing.JLabel LabelFecha;
     private javax.swing.JPanel PanelCrearProducto;
     private javax.swing.JButton btnAgregarVenta;
     private javax.swing.JButton btnAgregarVenta1;
@@ -651,15 +719,16 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabelSubTotal;
     private javax.swing.JList<Producto> jListVenta;
     private javax.swing.JPanel jPanelInventario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel jlabelTotal_Inventario;
-    private javax.swing.JLabel labelClienteVenta;
-    private javax.swing.JLabel labelFechaVenta;
-    private javax.swing.JLabel labelSubTotal;
+    private javax.swing.JLabel labelCliente;
+    private javax.swing.JLabel labelGeneric;
+    private javax.swing.JLabel labelSub;
     private javax.swing.JLabel labelTotalCordobasEnInventario;
     private javax.swing.JPanel panelDialogVenta;
     private javax.swing.JTextField txtCantidadProducto;
@@ -667,6 +736,7 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JTextField txtIdProducto;
     private javax.swing.JTextField txtIndicacionesProducto;
     private javax.swing.JTextField txtMarcaProducto;
+    private javax.swing.JTextField txtNombreClienteVenta;
     private javax.swing.JTextField txtNombreProducto;
     private javax.swing.JTextField txtPrecioProducto;
     // End of variables declaration//GEN-END:variables
