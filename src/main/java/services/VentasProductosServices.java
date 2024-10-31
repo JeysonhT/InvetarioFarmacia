@@ -7,7 +7,6 @@ package services;
 import Configurations.HibernateUtil;
 import java.util.List;
 import models.Producto;
-import models.Ventas;
 import models.VentasProducto;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

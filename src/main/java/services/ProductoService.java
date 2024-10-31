@@ -61,7 +61,7 @@ public class ProductoService {
             transanction.commit();
 
         } catch (Exception e) {
-            return "No se pudo eliminar el producto por que no existe: " + e.getMessage();
+            return "Existe una venta asociada a este producto " + e.getMessage();
         } finally{
             session.close();
         }
@@ -75,7 +75,22 @@ public class ProductoService {
         Producto producto = null;
         try {
             transaction = session.beginTransaction();
-            producto = session.merge("Productos", pp);
+            
+            producto = session.find(Producto.class, pp.getId());
+            
+            if(producto != null){
+                producto.setNombre(pp.getNombre());
+                producto.setIndicaciones(pp.getIndicaciones());
+                producto.setMarca(pp.getMarca());
+                producto.setCategoria_id(pp.getCategoria_id());
+                producto.setPrecio(pp.getPrecio());
+                producto.setCantidad(pp.getCantidad());
+                producto.setFecha_vencimiento(pp.getFecha_vencimiento());
+                
+                session.merge(producto);
+            } else {
+                throw new RuntimeException("El Producto no Existe");
+            }
             transaction.commit();
         } catch (Exception e) {
             throw new RuntimeException("No se puede actualizar el producto");
