@@ -5,7 +5,8 @@
 package services;
 
 import Configurations.HibernateUtil;
-import models.Ventas;
+import java.util.Date;
+import models.Facturas;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,31 +14,27 @@ import org.hibernate.Transaction;
  *
  * @author jason
  */
-public class VentasServices {
+public class FacturaServices {
 
-    public VentasServices() {
+    public FacturaServices() {
 
     }
 
-    public int guardarVentasProducto(Ventas ventas) {
+    public int createFactura(Facturas factura) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
-        try{
+
+        try {
             transaction = session.beginTransaction();
-            session.persist(ventas);
-            int key = ventas.getId();
-            
+            session.persist(factura);
             transaction.commit();
-            
-            return key;
-                    
-        } catch (Exception e){
-            if(transaction != null){
+            return factura.getId();
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
-            
-            throw new RuntimeException("Error en la consulta: " + e.getMessage());
-        } finally{
+            throw new RuntimeException("Error en los datos de entrada: " + e.getMessage());
+        } finally {
             session.close();
         }
     }

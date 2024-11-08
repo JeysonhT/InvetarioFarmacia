@@ -4,13 +4,9 @@
  */
 package controller;
 
-import Configurations.HibernateUtil;
-import java.awt.HeadlessException;
-import java.util.List;
-import javax.swing.JOptionPane;
-import models.Producto;
-import org.hibernate.Session;
-import views.PanelClientes;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import views.PanelFacturas;
 import views.PanelInventario;
 
 /**
@@ -26,6 +22,9 @@ public class FarmaciaController extends javax.swing.JFrame {
         initComponents();
         
         this.setLocationRelativeTo(this.JPanelBienvenida);
+        Image icono = new ImageIcon(getClass().getResource("/inventarioIcon.png")).getImage();
+        
+        this.setIconImage(icono);
     }
 
     /**
@@ -42,16 +41,14 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         LabelBtnFacturas = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        LabelBtnClientes = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         LabelBtnCerrarSesion = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         Contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setFont(new java.awt.Font("Nunito", 0, 14)); // NOI18N
+        setTitle("Sistema De inventario Farmacia Jeshua");
+        setFont(new java.awt.Font("Nunito", 0, 18)); // NOI18N
         setMaximumSize(new java.awt.Dimension(1280, 7202));
         setMinimumSize(new java.awt.Dimension(720, 576));
         setPreferredSize(new java.awt.Dimension(720, 576));
@@ -84,18 +81,6 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Facturas");
 
-        LabelBtnClientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelBtnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/atencion-al-cliente(1).png"))); // NOI18N
-        LabelBtnClientes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                LabelBtnClientesMouseClicked(evt);
-            }
-        });
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Clientes");
-
         LabelBtnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cerrar-sesion-alt(1).png"))); // NOI18N
         LabelBtnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -109,17 +94,12 @@ public class FarmaciaController extends javax.swing.JFrame {
             JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                 .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelBienvenidaLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jSeparator2))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(LabelBtnFacturas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(LabelBtnInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelBtnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                                 .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,13 +124,7 @@ public class FarmaciaController extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LabelBtnClientes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(135, 135, 135)
                 .addComponent(LabelBtnCerrarSesion)
                 .addContainerGap(290, Short.MAX_VALUE))
         );
@@ -164,19 +138,15 @@ public class FarmaciaController extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void LabelBtnClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnClientesMouseClicked
-        PanelClientes pClientes = new PanelClientes();
-        pClientes.setSize(Contenedor.getWidth(), Contenedor.getHeight());
-        pClientes.setLocation(0, 0);
+    private void LabelBtnFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnFacturasMouseClicked
+        PanelFacturas pFacturas = new PanelFacturas();
+        pFacturas.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        pFacturas.setLocation(0, 0);
         
         Contenedor.removeAll();
-        Contenedor.add(pClientes);
+        Contenedor.add(pFacturas);
         Contenedor.revalidate();
         Contenedor.repaint();
-    }//GEN-LAST:event_LabelBtnClientesMouseClicked
-
-    private void LabelBtnFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnFacturasMouseClicked
-        // TODO add your handling code here:
     }//GEN-LAST:event_LabelBtnFacturasMouseClicked
 
     private void LabelBtnInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnInventarioMouseClicked
@@ -199,13 +169,10 @@ public class FarmaciaController extends javax.swing.JFrame {
     private javax.swing.JPanel Contenedor;
     private javax.swing.JPanel JPanelBienvenida;
     private javax.swing.JLabel LabelBtnCerrarSesion;
-    private javax.swing.JLabel LabelBtnClientes;
     private javax.swing.JLabel LabelBtnFacturas;
     private javax.swing.JLabel LabelBtnInventario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     // End of variables declaration//GEN-END:variables

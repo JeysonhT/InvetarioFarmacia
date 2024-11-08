@@ -23,9 +23,9 @@
         <mapping class="models.Producto"/>
         <mapping class="models.Cliente"/>
         
-        <mapping class="models.DetallesFactura"/>
+        <mapping class="models.FacturasCliente"/>
         
-        <mapping class="models.Factura"/>
+        <mapping class="models.Facturas"/>
         
         <mapping class="models.Ventas"/>
         

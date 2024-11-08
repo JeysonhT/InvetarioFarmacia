@@ -41,6 +41,32 @@ public class ClienteServices {
 
     }
 
+    public int getIdClienteNoRegistrado() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+
+        String sql = "SELECT FROM Clientes where cliente.nombre = 'no registrado'";
+        
+        try {
+            transaction = session.beginTransaction();
+            NativeQuery<Cliente> query = session.createNativeQuery(sql,
+                    Cliente.class);
+            Cliente cliente = query.getResultList().get(0);
+           
+            transaction.commit();
+            return cliente.getId();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("El registro no existe: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+    }
+
     public List<Cliente> obtenerClientes() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction;
