@@ -4,22 +4,27 @@
  */
 package views;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Categoria;
 import models.Cliente;
 import models.Facturas;
-import models.Producto;
+import models.Productos;
 import models.Ventas;
 import models.VentasProducto;
+import net.sf.jasperreports.engine.JRException;
 import services.CategoriaServices;
 import services.ClienteServices;
 import services.FacturaServices;
@@ -36,7 +41,7 @@ import services.VentasServices;
 public class PanelInventario extends javax.swing.JPanel {
 
     private DefaultTableModel tableModel = new DefaultTableModel();
-    private DefaultListModel<Producto> listModel = new DefaultListModel<>();
+    private DefaultListModel<Productos> listModel = new DefaultListModel<>();
     private DefaultListModel<Cliente> modelCliente = new DefaultListModel<>();
     private double Subtotal;
 
@@ -59,14 +64,14 @@ public class PanelInventario extends javax.swing.JPanel {
     private void obtenerDatos() {
         Map<Integer, String> categorias = obtenerCategorias();
 
-        List<Producto> productos = new ProductoService().obtenerProductos();
+        List<Productos> productos = new ProductoService().obtenerProductos();
         DefaultTableModel model = new DefaultTableModel();
         String[] Columnas = {"Id", "Nombre", "Indicaciones", "Marca",
             "Categoria", "Precio", "Cantidad", "Fecha_caducidad"};
 
         model.setColumnIdentifiers(Columnas);
 
-        for (Producto p : productos) {
+        for (Productos p : productos) {
             String nombreCategoria = categorias.get(p.getCategoria_id());
             String[] renglon = {
                 String.valueOf(p.getId()),
@@ -144,18 +149,18 @@ public class PanelInventario extends javax.swing.JPanel {
         txtCantidadProducto.setText("");
         txtFecha_Vencimiento_Producto.setText("");
     }
-    
-    
+
     //metodo para mostrar el subtotal de la venta
-    private void ObtenerSubtotalVenta(){     
+    private void ObtenerSubtotalVenta() {
         Subtotal = 0.0;
-        
-        for(int i = 0; i<listModel.getSize(); i++){
+
+        for (int i = 0; i < listModel.getSize(); i++) {
             Subtotal += listModel.get(i).getPrecio() * listModel.get(i).getCantidad();
         }
-        
-        jLabelSubTotal.setText(""+Subtotal);
+
+        jLabelSubTotal.setText("" + Subtotal);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -203,6 +208,7 @@ public class PanelInventario extends javax.swing.JPanel {
         txtCantidadVenta = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         btnEstablecerCantidad = new javax.swing.JButton();
+        checkGenerarFactura = new javax.swing.JCheckBox();
         jDialogCliente = new javax.swing.JDialog();
         panelDialogClientes = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -231,6 +237,9 @@ public class PanelInventario extends javax.swing.JPanel {
         btnVentas = new javax.swing.JButton();
         botonClientes = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
+        txtBuscarProducto = new javax.swing.JTextField();
+        btnBuscarProducto = new javax.swing.JButton();
+        btnQuitarFiltroProducto = new javax.swing.JButton();
 
         jDialogProductos.setBounds(new java.awt.Rectangle(0, 0, 530, 400));
         jDialogProductos.setResizable(false);
@@ -254,12 +263,6 @@ public class PanelInventario extends javax.swing.JPanel {
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel24.setText("Cantidad");
-
-        txtCantidadProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidadProductoActionPerformed(evt);
-            }
-        });
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel25.setText("Fecha de Vencimiento");
@@ -476,6 +479,10 @@ public class PanelInventario extends javax.swing.JPanel {
         });
         panelDialogVenta.add(btnEstablecerCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 180, -1));
 
+        checkGenerarFactura.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        checkGenerarFactura.setText("Generar Factura");
+        panelDialogVenta.add(checkGenerarFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 150, -1));
+
         javax.swing.GroupLayout JDialogVentaLayout = new javax.swing.GroupLayout(JDialogVenta.getContentPane());
         JDialogVenta.getContentPane().setLayout(JDialogVentaLayout);
         JDialogVentaLayout.setHorizontalGroup(
@@ -607,7 +614,7 @@ public class PanelInventario extends javax.swing.JPanel {
         jlabelTotal_Inventario.setText("Total en inventario:");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/farmacia(2).png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/farmacia.png"))); // NOI18N
         jLabel1.setText("Inventario Farmacia Jeshua");
 
         JTableProductos.setBackground(new java.awt.Color(204, 204, 255));
@@ -687,6 +694,30 @@ public class PanelInventario extends javax.swing.JPanel {
             }
         });
 
+        txtBuscarProducto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtBuscarProducto.setForeground(new java.awt.Color(204, 204, 204));
+        txtBuscarProducto.setText("Busque un producto");
+        txtBuscarProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtBuscarProductoMouseClicked(evt);
+            }
+        });
+
+        btnBuscarProducto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnBuscarProducto.setText("Buscar");
+        btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoActionPerformed(evt);
+            }
+        });
+
+        btnQuitarFiltroProducto.setText("Quitar Filtro");
+        btnQuitarFiltroProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnQuitarFiltroProductoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelInventarioLayout = new javax.swing.GroupLayout(jPanelInventario);
         jPanelInventario.setLayout(jPanelInventarioLayout);
         jPanelInventarioLayout.setHorizontalGroup(
@@ -697,15 +728,17 @@ public class PanelInventario extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventarioLayout.createSequentialGroup()
                         .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelInventarioLayout.createSequentialGroup()
-                                .addComponent(labelTotalCordobasEnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))
-                            .addGroup(jPanelInventarioLayout.createSequentialGroup()
                                 .addComponent(jlabelTotal_Inventario, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelTotalCordobasEnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnQuitarFiltroProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnBuscarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addComponent(botonClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventarioLayout.createSequentialGroup()
                                 .addComponent(jSeparator1)
@@ -721,6 +754,8 @@ public class PanelInventario extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventarioLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(51, 51, 51)
                                 .addComponent(btnCrearProductos)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEditarProducto)
@@ -731,38 +766,50 @@ public class PanelInventario extends javax.swing.JPanel {
         jPanelInventarioLayout.setVerticalGroup(
             jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelInventarioLayout.createSequentialGroup()
-                .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventarioLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(jPanelInventarioLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnEliminarProductos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnEditarProducto)
-                                .addComponent(btnCrearProductos)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jlabelTotal_Inventario)
+                    .addGroup(jPanelInventarioLayout.createSequentialGroup()
+                        .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInventarioLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1))
+                            .addGroup(jPanelInventarioLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnEliminarProductos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnEditarProducto)
+                                        .addComponent(btnCrearProductos)
+                                        .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jlabelTotal_Inventario)
+                            .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnBuscarProducto))))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
+                .addGap(8, 8, 8)
                 .addGroup(jPanelInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarVenta)
                     .addComponent(btnVentas)
                     .addComponent(labelTotalCordobasEnInventario)
                     .addComponent(botonClientes)
-                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnQuitarFiltroProducto))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
         );
 
         add(jPanelInventario, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCantidadProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidadProductoActionPerformed
+    public boolean validarCamposProducto() {
+
+        return txtNombreProducto.getText().isBlank() || txtIndicacionesProducto.getText().isBlank() || txtMarcaProducto
+                .getText().isBlank() || jComboCategoriaProducto.getSelectedIndex() < 1 || txtPrecioProducto
+                .getText().isBlank() || txtCantidadProducto.getText().isBlank() || txtFecha_Vencimiento_Producto
+                .getText().isBlank();
+
+    }
+
 
     private void btnCrearProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearProductosMouseClicked
         LimpiarCampos();
@@ -772,30 +819,37 @@ public class PanelInventario extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCrearProductosMouseClicked
 
     private void LabelBtnGuardarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnGuardarProductoMouseClicked
+        // Primero comprobar que cada campo de texto de productos este lleno
+        if (validarCamposProducto()) {
+            JOptionPane.showMessageDialog(this, "Rellene todos los campos y seleccione una categoria Disponible");
+        } else {
 
-        String nombre = txtNombreProducto.getText();
-        String indicaciones = txtIndicacionesProducto.getText();
-        String marca = txtMarcaProducto.getText();
-        int categoria_id = jComboCategoriaProducto.
-                getItemAt(jComboCategoriaProducto.getSelectedIndex()).getId();
-        double precio = Double.parseDouble(txtPrecioProducto.getText());
-        int cantidad = Integer.parseInt(txtCantidadProducto.getText());
-        Date fecha_vencimiento = Date.valueOf(txtFecha_Vencimiento_Producto.getText());
+            String nombre = txtNombreProducto.getText();
+            String indicaciones = txtIndicacionesProducto.getText();
+            String marca = txtMarcaProducto.getText();
+            int categoria_id = jComboCategoriaProducto.
+                    getItemAt(jComboCategoriaProducto.getSelectedIndex()).getId();
+            double precio = Double.parseDouble(txtPrecioProducto.getText());
+            int cantidad = Integer.parseInt(txtCantidadProducto.getText());
+            Date fecha_vencimiento = Date.valueOf(txtFecha_Vencimiento_Producto.getText());
 
-        //Construccion del objeto
-        Producto producto = new Producto(nombre,
-                indicaciones, marca, categoria_id,
-                precio, cantidad, fecha_vencimiento);
+            //Construccion del objeto
+            Productos producto = new Productos(nombre,
+                    indicaciones, marca, categoria_id,
+                    precio, cantidad, fecha_vencimiento);
 
-        try {
-            String response = new ProductoService().crearProducto(producto);
-            JOptionPane.showMessageDialog(PanelCrearProducto, response);
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(PanelCrearProducto, e.getMessage());
+            try {
+                String response = new ProductoService().crearProducto(producto);
+                JOptionPane.showMessageDialog(PanelCrearProducto, response);
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(PanelCrearProducto, e.getMessage());
+            }
+
+            LimpiarCampos();
+            obtenerDatos();
         }
 
-        LimpiarCampos();
-        obtenerDatos();
+
     }//GEN-LAST:event_LabelBtnGuardarProductoMouseClicked
 
     private void btnEditarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarProductoMouseClicked
@@ -862,10 +916,10 @@ public class PanelInventario extends javax.swing.JPanel {
 
                 double precio = Double.parseDouble((String) this.JTableProductos.
                         getValueAt(fila, 5).toString());
-                
+
                 // Establezco por predeterminado cantidad en uno
                 int cantidad = 1;
-                
+
                 Date fecha = Date.valueOf((String) this.JTableProductos.
                         getValueAt(fila, 7).toString().split(" ")[0]);
 
@@ -880,8 +934,8 @@ public class PanelInventario extends javax.swing.JPanel {
                     }
                 }
 
-                Producto producto = new Producto(id, nombre, indicaciones, marca, categoriaId, precio, cantidad, fecha);
-                
+                Productos producto = new Productos(id, nombre, indicaciones, marca, categoriaId, precio, cantidad, fecha);
+
                 listModel.addElement(producto);
 
                 JOptionPane.showMessageDialog(labelCliente, "producto agregado: " + producto.getNombre());
@@ -895,7 +949,7 @@ public class PanelInventario extends javax.swing.JPanel {
 
     private void btnVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVentasMouseClicked
         if (jListVenta.getModel().getSize() < 1) {
-            JOptionPane.showMessageDialog(labelCliente,
+            JOptionPane.showMessageDialog(this,
                     "No hay productos agregados a la venta");
         } else {
             JDialogVenta.setVisible(true);
@@ -920,49 +974,80 @@ public class PanelInventario extends javax.swing.JPanel {
         try {
             //1. Se Guarda la venta
             int key = new VentasServices().guardarVentasProducto(new Ventas(fecha, total));
-            JOptionPane.showMessageDialog(labelCliente, "venta id: " + key);
 
             // Luego se guarda la factura
             int fkey = new FacturaServices().
                     createFactura(new Facturas(fecha, key));
 
             if (fkey == 0) {
-                JOptionPane.showMessageDialog(labelCliente,
+                JOptionPane.showMessageDialog(JDialogVenta,
                         "Error al guardar la factura:");
-            } else {
-                //al validar que se guardo correctamente la facutura se guarda la factura del cliente
-                String response = new FacturasClienteServices().
-                        createFacturasCliente(fkey, idCliente);
-                JOptionPane.showMessageDialog(labelCliente, response);
             }
+            //al validar que se guardo correctamente la facutura se guarda la factura del cliente
+            String responseF = new FacturasClienteServices().
+                    createFacturasCliente(fkey, idCliente);
 
             //Luego se procede a guardar todos los productos de la venta
-            List<Producto> productos = new ArrayList<>();
+            List<Productos> productos = new ArrayList<>();
             for (int i = 0; i < jListVenta.getModel().getSize(); i++) {
                 productos.add(jListVenta.getModel().getElementAt(i));
             }
 
             List<VentasProducto> listVenta = new ArrayList<>();
 
-            for (Producto p : productos) {
+            for (Productos p : productos) {
                 listVenta.add(new VentasProducto(key,
                         p.getId(), p.getCantidad(), p.getPrecio()));
             }
 
             String response = new VentasProductosServices().crearVentasProductos(listVenta);
 
-            JOptionPane.showMessageDialog(labelCliente, response);
+            StringBuilder sb = new StringBuilder();
+            
+            //Creo el mensaje con informacion sobre el proceso
+            sb.append("Venta id: ").append(key);
+            sb.append("\n").append(responseF).append("\n").append(response);
+            
+            String message = sb.toString();
+            
+            //Lo muestro en un solo JOptionPane
+            
+            JOptionPane.showMessageDialog(JDialogVenta, message);
+            
+            //verifico si el check de generar facura esta marcado o no para iniciar el proceso de impirmir una factura
+            if (checkGenerarFactura.isSelected()) {
+                String nombreCliente = txtNombreClienteVenta.getText();
+
+                double subTotal = Subtotal;
+
+                Map<String, Object> parametros = new HashMap<>();
+                parametros.put("NombreCliente", nombreCliente);
+                parametros.put("SubTotal", subTotal);
+
+                ReportesServices reportServices = new ReportesServices();
+
+                try {
+                    reportServices.CrearFactura(parametros, productos, "/Reports/Report _facturacion.jrxml");
+                } catch (JRException ex) {
+                    Logger.getLogger(PanelInventario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
 
             Subtotal = 0.0;
 
             jLabelSubTotal.setText("");
+
+            txtCantidadVenta.setText("");
+
+            txtNombreClienteVenta.setText("");
 
             listModel.clear();
 
             obtenerDatos();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(labelCliente, e.getMessage());
+            JOptionPane.showMessageDialog(JDialogVenta, e.getMessage());
         }
     }//GEN-LAST:event_btnprocesarVentaActionPerformed
 
@@ -1028,32 +1113,38 @@ public class PanelInventario extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarProductosActionPerformed
 
     private void labelBtnActualizarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelBtnActualizarProductoMouseClicked
+        if (validarCamposProducto()) {
+            int id = Integer.parseInt(txtIdProducto.getText());
+            String nombre = txtNombreProducto.getText();
+            String indicaciones = txtIndicacionesProducto.getText();
+            String marca = txtMarcaProducto.getText();
+            int categoria_id = jComboCategoriaProducto.
+                    getItemAt(jComboCategoriaProducto.getSelectedIndex()).getId();
+            double precio = Double.parseDouble(txtPrecioProducto.getText());
+            int cantidad = Integer.parseInt(txtCantidadProducto.getText());
+            Date fecha_vencimiento = Date.valueOf(txtFecha_Vencimiento_Producto.getText());
 
-        int id = Integer.parseInt(txtIdProducto.getText());
-        String nombre = txtNombreProducto.getText();
-        String indicaciones = txtIndicacionesProducto.getText();
-        String marca = txtMarcaProducto.getText();
-        int categoria_id = jComboCategoriaProducto.
-                getItemAt(jComboCategoriaProducto.getSelectedIndex()).getId();
-        double precio = Double.parseDouble(txtPrecioProducto.getText());
-        int cantidad = Integer.parseInt(txtCantidadProducto.getText());
-        Date fecha_vencimiento = Date.valueOf(txtFecha_Vencimiento_Producto.getText());
+            Productos prod = new Productos(id, nombre, indicaciones, marca, categoria_id, precio, cantidad, fecha_vencimiento);
 
-        Producto prod = new Producto(id, nombre, indicaciones, marca, categoria_id, precio, cantidad, fecha_vencimiento);
+            try {
+                Productos response = new ProductoService().actualizarProducto(prod);
 
-        try {
-            Producto response = new ProductoService().actualizarProducto(prod);
+                JOptionPane.showMessageDialog(labelCliente,
+                        response.toString());
 
-            JOptionPane.showMessageDialog(labelCliente,
-                    response.toString());
+                LimpiarCampos();
+                obtenerDatos();
+                jDialogProductos.dispose();
 
-            LimpiarCampos();
-            obtenerDatos();
-            jDialogProductos.dispose();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(labelCliente, e.getMessage());
+            } catch (RuntimeException e) {
+                JOptionPane.showMessageDialog(labelCliente, e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, """
+                                                Rellene todos lo campos de texto del producto
+                                                y seleccione una categoria""");
         }
+
     }//GEN-LAST:event_labelBtnActualizarProductoMouseClicked
 
     private void obtenerDatosCliente() {
@@ -1150,29 +1241,86 @@ public class PanelInventario extends javax.swing.JPanel {
                 } else {
                     cantidad = txtCantidadVenta.getText();
                 }
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(labelCliente, e.getMessage());
             }
 
-            Producto produto = jListVenta.getSelectedValue();
+            Productos produto = jListVenta.getSelectedValue();
             produto.setCantidad(Integer.parseInt((String) cantidad));
             listModel.removeElementAt(index);
             listModel.addElement(produto);
-            
+
             ObtenerSubtotalVenta();
         }
     }//GEN-LAST:event_btnEstablecerCantidadActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-        try{
+        try {
             ReportesServices reporte = new ReportesServices();
             reporte.productosCantidadBaja();
-            
-        } catch (Exception e){
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(labelCliente, e.getMessage());
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btnReportesActionPerformed
+    //Metodos para la busqueda de Los productos
+
+    private void txtBuscarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuscarProductoMouseClicked
+        txtBuscarProducto.setText("");
+        txtBuscarProducto.setForeground(Color.BLACK);
+    }//GEN-LAST:event_txtBuscarProductoMouseClicked
+
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
+        if (txtBuscarProducto.getText().contentEquals("")
+                || txtBuscarProducto.getText().contentEquals("Busque un producto")) {
+            JOptionPane.showMessageDialog(this, "Ingrese el nombre de un producto");
+        } else {
+            try {
+                String clave = txtBuscarProducto.getText();
+                Productos p = new ProductoService().obtenerProductoByName(clave);
+
+                Map<Integer, String> categorias = obtenerCategorias();
+
+                if (p == null) {
+                    JOptionPane.showMessageDialog(this, """
+                                                    El producto no existe o 
+                                                    No se inserto correctamente el nombre""");
+                } else {
+
+                    DefaultTableModel newmodel = new DefaultTableModel();
+                    String[] Columnas = {"Id", "Nombre", "Indicaciones", "Marca",
+                        "Categoria", "Precio", "Cantidad", "Fecha_caducidad"};
+
+                    newmodel.setColumnIdentifiers(Columnas);
+
+                    String nombreCategoria = categorias.get(p.getCategoria_id());
+                    String[] renglon = {
+                        String.valueOf(p.getId()),
+                        p.getNombre(),
+                        p.getIndicaciones(),
+                        p.getMarca(),
+                        nombreCategoria,
+                        String.valueOf(p.getPrecio()),
+                        String.valueOf(p.getCantidad()),
+                        p.getFecha_vencimiento().toString()
+                    };
+
+                    newmodel.addRow(renglon);
+
+                    JTableProductos.setModel(newmodel);
+                }
+
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(labelCliente, e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnBuscarProductoActionPerformed
+
+    private void btnQuitarFiltroProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnQuitarFiltroProductoMouseClicked
+        obtenerDatos();
+        txtBuscarProducto.setText("");
+    }//GEN-LAST:event_btnQuitarFiltroProductoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1186,6 +1334,7 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAgregarVenta;
     private javax.swing.JButton btnBorrarProductoVenta;
+    private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnCancelarVenta;
     private javax.swing.JButton btnClienteVenta;
     private javax.swing.JButton btnCrearProductos;
@@ -1193,9 +1342,11 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnEliminarProductos;
     private javax.swing.JButton btnEstablecerCantidad;
+    private javax.swing.JButton btnQuitarFiltroProducto;
     private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnVentas;
     private javax.swing.JButton btnprocesarVenta;
+    private javax.swing.JCheckBox checkGenerarFactura;
     private javax.swing.JComboBox<Categoria> jComboCategoriaProducto;
     private javax.swing.JDialog jDialogCliente;
     private javax.swing.JDialog jDialogProductos;
@@ -1214,7 +1365,7 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelSubTotal;
-    private javax.swing.JList<Producto> jListVenta;
+    private javax.swing.JList<models.Productos> jListVenta;
     private javax.swing.JPanel jPanelInventario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1229,6 +1380,7 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JLabel labelTotalCordobasEnInventario;
     private javax.swing.JPanel panelDialogClientes;
     private javax.swing.JPanel panelDialogVenta;
+    private javax.swing.JTextField txtBuscarProducto;
     private javax.swing.JTextField txtCantidadProducto;
     private javax.swing.JTextField txtCantidadVenta;
     private javax.swing.JTextField txtFecha_Vencimiento_Producto;

@@ -6,14 +6,19 @@ package services;
 
 import Configurations.HibernateUtil;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import models.Productos;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.hibernate.Session;
-import org.hibernate.engine.spi.SessionImplementor;
 
 /**
  *
@@ -28,7 +33,6 @@ public class ReportesServices {
     public void productosCantidadBaja() {
         String path = "/Reports/Reporte_Letter.jrxml";
         InputStream reportStream = getClass().getResourceAsStream(path);
-        
 
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -43,6 +47,25 @@ public class ReportesServices {
             }
         }
         );
+    }
+
+    public void CrearFactura(Map<String, Object> parametros, List<Productos> productos, String path) throws JRException {
+        try {
+
+            InputStream reportStream = getClass().getResourceAsStream(path);
+
+            JasperReport factura = JasperCompileManager.compileReport(reportStream);
+
+            JRBeanCollectionDataSource dataSrc = new JRBeanCollectionDataSource(productos);
+
+            JasperPrint mostrarFactura = JasperFillManager.fillReport(factura, parametros,
+                    dataSrc);
+
+            JasperViewer.viewReport(mostrarFactura, false);
+
+        } catch (JRException e) {
+            throw new JRException("No se encuentra la ruta del archivo:" + e.getMessage());
+        }
     }
 
 }

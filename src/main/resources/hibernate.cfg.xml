@@ -20,7 +20,8 @@
         
         
         <!-- Mapear manual de las entidades sin usar auto-scanning -->
-        <mapping class="models.Producto"/>
+        <mapping class="models.Productos"/>
+        
         <mapping class="models.Cliente"/>
         
         <mapping class="models.FacturasCliente"/>
