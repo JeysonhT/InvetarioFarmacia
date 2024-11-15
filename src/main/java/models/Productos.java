@@ -21,7 +21,7 @@ import lombok.Setter;
 @Table(name = "Productos")
 @Getter
 @Setter
-public class Producto {
+public class Productos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,15 +35,16 @@ public class Producto {
     private int cantidad;
     private Date fecha_vencimiento;
 
-    public Producto() {
+    public Productos() {
     }
 
-    public Producto(String nombre, Double precio) {
+    public Productos(String nombre,int cantidad, Double precio) {
         this.nombre = nombre;
+        this.cantidad = cantidad;
         this.precio = precio;
     }
 
-    public Producto(String nombre, String indicaciones, String marca, int categoria_id, Double precio, int cantidad, Date fecha_vencimiento) {
+    public Productos(String nombre, String indicaciones, String marca, int categoria_id, Double precio, int cantidad, Date fecha_vencimiento) {
         this.nombre = nombre;
         this.indicaciones = indicaciones;
         this.marca = marca;
@@ -53,7 +54,7 @@ public class Producto {
         this.fecha_vencimiento = fecha_vencimiento;
     }
 
-    public Producto(int id, String nombre, String indicaciones, String marca, int categoria_id, Double precio, int cantidad, Date fecha_vencimiento) {
+    public Productos(int id, String nombre, String indicaciones, String marca, int categoria_id, Double precio, int cantidad, Date fecha_vencimiento) {
         this.id = id;
         this.nombre = nombre;
         this.indicaciones = indicaciones;
@@ -64,9 +65,10 @@ public class Producto {
         this.fecha_vencimiento = fecha_vencimiento;
     }
 
+
     @Override
     public String toString() {
-        return nombre + ", idCategoria: " + categoria_id +", C$:" + precio + ", Caducidad:" + fecha_vencimiento.toString();
+        return nombre + ", cantidad: " + cantidad + ", C$:" + precio + ", Caducidad:" + fecha_vencimiento.toString();
     }
 
 

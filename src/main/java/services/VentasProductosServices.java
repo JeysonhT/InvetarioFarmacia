@@ -6,8 +6,7 @@ package services;
 
 import Configurations.HibernateUtil;
 import java.util.List;
-import models.Producto;
-import models.Ventas;
+import models.Productos;
 import models.VentasProducto;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -31,7 +30,7 @@ public class VentasProductosServices {
             for (VentasProducto vp : listVenta) {
                 session.persist(vp);
                 
-                Producto producto = session.find(Producto.class, vp.getProducto_id());
+                Productos producto = session.find(Productos.class, vp.getProducto_id());
                 if(producto != null){
                     int nuevaCantidad = producto.getCantidad() - vp.getCantidad();
                     if(nuevaCantidad < 0){
