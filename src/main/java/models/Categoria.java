@@ -29,6 +29,10 @@ public class Categoria {
     public Categoria(){
         
     }
+
+    public Categoria(String nombre_categoria) {
+        this.nombre_categoria = nombre_categoria;
+    }
     
     public Categoria(int id, String nombre_categoria) {
         this.id = id;

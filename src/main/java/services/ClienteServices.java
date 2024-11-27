@@ -41,21 +41,21 @@ public class ClienteServices {
 
     }
 
-    public int getIdClienteNoRegistrado() {
+    public Cliente getIdClienteNoRegistrado() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
-        String sql = "SELECT FROM Clientes where cliente.nombre = 'no registrado'";
+        String sql = "SELECT * FROM Clientes where nombre = 'Cliente Anonimo'";
         
+        Cliente cliente = new Cliente();
         try {
             transaction = session.beginTransaction();
             NativeQuery<Cliente> query = session.createNativeQuery(sql,
                     Cliente.class);
-            Cliente cliente = query.getResultList().get(0);
+            cliente = query.getResultList().get(0);
            
             transaction.commit();
-            return cliente.getId();
-
+            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -64,6 +64,8 @@ public class ClienteServices {
         } finally {
             session.close();
         }
+        
+        return cliente;
 
     }
 

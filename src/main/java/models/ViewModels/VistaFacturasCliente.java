@@ -15,28 +15,34 @@ import lombok.Setter;
 @Getter @Setter 
 public class VistaFacturasCliente {
     
+    private int factura_id;
+    private Date fecha_factura;
     private String nombre_cliente;
-    private int id;
-    private Date fecha;
-    private double total;
-    private String Nombreproducto;
-    private int Cantidad;
-    private double precio;
+    private String telefono_cliente;
+    private String nombre_producto;
+    private int cantidad_producto;
+    private double precio_producto;
     private double subtotal;
     
     public VistaFacturasCliente(){
         
     }
 
-    public VistaFacturasCliente(String nombre_cliente, int id, Date fecha, double total, String Nombreproducto, int Cantidad, double precio, double subtotal) {
+    public VistaFacturasCliente(int factura_id, Date fecha_factura, String nombre_cliente, String telefono_cliente, String nombre_producto, int cantidad_producto, double precio_producto, double subtotal) {
+        this.factura_id = factura_id;
+        this.fecha_factura = fecha_factura;
         this.nombre_cliente = nombre_cliente;
-        this.id = id;
-        this.fecha = fecha;
-        this.total = total;
-        this.Nombreproducto = Nombreproducto;
-        this.Cantidad = Cantidad;
-        this.precio = precio;
+        this.telefono_cliente = telefono_cliente;
+        this.nombre_producto = nombre_producto;
+        this.cantidad_producto = cantidad_producto;
+        this.precio_producto = precio_producto;
         this.subtotal = subtotal;
     }
+
+    @Override
+    public String toString() {
+        return "factura_id=" + factura_id + ", fecha=" + fecha_factura + ", producto=" + nombre_producto + ", cantidad=" + cantidad_producto + ", precio=" + precio_producto + ", subtotal=" + subtotal ;
+    }
+
     
 }

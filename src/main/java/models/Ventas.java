@@ -28,20 +28,22 @@ public class Ventas {
     private int id;
 
     private Date fecha;
-
+    private double subtotal;
     private double total;
 
     public Ventas() {
     }
 
-    public Ventas(int id, Date fecha, double total) {
+    public Ventas(int id, Date fecha, double subtotal, double total) {
         this.id = id;
         this.fecha = fecha;
+        this.subtotal = subtotal;
         this.total = total;
     }
 
-    public Ventas(Date fecha, double total) {
+    public Ventas(Date fecha, double subtotal, double total) {
         this.fecha = fecha;
+        this.subtotal = subtotal;
         this.total = total;
     }
 

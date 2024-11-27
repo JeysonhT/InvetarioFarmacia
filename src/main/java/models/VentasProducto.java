@@ -34,6 +34,7 @@ public class VentasProducto {
 
     private double precio;
 
+
     public VentasProducto() {
     }
 
