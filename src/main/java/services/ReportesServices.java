@@ -8,13 +8,13 @@ import Configurations.HibernateUtil;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import models.Productos;
-import net.sf.jasperreports.engine.JREmptyDataSource;
+import models.ViewModels.VentasMes;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
@@ -61,10 +61,29 @@ public class ReportesServices {
             JasperPrint mostrarFactura = JasperFillManager.fillReport(factura, parametros,
                     dataSrc);
 
-            JasperViewer.viewReport(mostrarFactura, false);
+            // JasperViewer.viewReport(mostrarFactura, false);
+            
+            JasperPrintManager.printReport(mostrarFactura, false);
 
         } catch (JRException e) {
             throw new JRException("No se encuentra la ruta del archivo:" + e.getMessage());
+        }
+    }
+
+    public void ReporteVentasMes(Map<String, Object> parametros, List<VentasMes> ventasMes, String path) throws JRException {
+        try {
+            InputStream reportStream = getClass().getResourceAsStream(path);
+            
+            JasperReport Reporte = JasperCompileManager.compileReport(reportStream);
+            
+            JRBeanCollectionDataSource dataSrc = new JRBeanCollectionDataSource(ventasMes);
+            
+            JasperPrint mostrarReporte = JasperFillManager.fillReport(Reporte, parametros,
+                    dataSrc);
+            
+            JasperViewer.viewReport(mostrarReporte, false);
+        } catch (JRException e) {
+            throw new JRException("No se encuentra la ruta del archivo: " + e.getMessage());
         }
     }
 

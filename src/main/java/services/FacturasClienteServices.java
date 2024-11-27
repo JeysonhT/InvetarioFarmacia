@@ -129,4 +129,29 @@ public class FacturasClienteServices {
         }
         return resultado;
     }
+    
+    public List<VistaFacturasCliente> obtenerVistaFacturaByFactura(int clave) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction;
+
+        List<VistaFacturasCliente> resultado = new ArrayList<>();
+
+        String sql = "SELECT * FROM vista_facturas_clientes_productos WHERE factura_id = :clave";
+
+        try {
+            transaction = session.beginTransaction();
+
+            NativeQuery<VistaFacturasCliente> query = session.createNativeQuery(sql,
+                    VistaFacturasCliente.class).setParameter("clave", clave);
+
+            transaction.commit();
+            resultado = query.getResultList();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error en la consulta: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return resultado;
+    }
 }

@@ -7,8 +7,8 @@
         <!-- Configuración de la base de datos -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/Farmacia</property>
-        <property name="hibernate.connection.username">jeysonh Tellez</property>
-        <property name="hibernate.connection.password">takemyherat17</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.connection.password">admin1234admin</property>
 
         <!-- Dialecto de MySQL -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
@@ -19,7 +19,7 @@
         <property name="hibernate.transaction.coordinator_class">jdbc</property>
         
         
-        <!-- Mapear manual de las entidades sin usar auto-scanning -->
+        <!-- Mapeo manual de las entidades sin usar auto-scanning -->
         <mapping class="models.Productos"/>
         
         <mapping class="models.Cliente"/>
@@ -35,6 +35,14 @@
         <mapping class="models.Categoria"/>
         
         <mapping class="models.Usuarios"/>
+        
+        <mapping class="models.UnidadesMultiples"/>
+        
+        <mapping class="models.Lotes"/>
+        
+        <mapping class="models.ViewModels.Presentacion"/>
 
     </session-factory>
+    
+    
 </hibernate-configuration>

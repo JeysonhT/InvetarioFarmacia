@@ -6,8 +6,10 @@ package controller;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import views.PanelConfiguraciones;
 import views.PanelFacturas;
 import views.PanelInventario;
+import views.PanelReportes;
 
 /**
  *
@@ -25,6 +27,15 @@ public class FarmaciaController extends javax.swing.JFrame {
         Image icono = new ImageIcon(getClass().getResource("/inventarioIcon.png")).getImage();
         
         this.setIconImage(icono);
+        
+        PanelInventario inventario = new PanelInventario();
+        inventario.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        inventario.setLocation(0, 0);
+        
+        Contenedor.removeAll();
+        Contenedor.add(inventario);
+        Contenedor.revalidate();
+        Contenedor.repaint();
     }
 
     /**
@@ -44,17 +55,22 @@ public class FarmaciaController extends javax.swing.JFrame {
         LabelBtnCerrarSesion = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        labelBtnConfiguración = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         Contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistema De inventario Farmacia Jeshua");
+        setTitle("Sistema De Inventario Farmacia Yeshua");
+        setBackground(new java.awt.Color(204, 255, 255));
         setFont(new java.awt.Font("Nunito", 0, 18)); // NOI18N
         setMaximumSize(new java.awt.Dimension(1280, 7202));
         setMinimumSize(new java.awt.Dimension(720, 576));
         setPreferredSize(new java.awt.Dimension(720, 576));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JPanelBienvenida.setBackground(new java.awt.Color(204, 204, 255));
+        JPanelBienvenida.setBackground(new java.awt.Color(179, 226, 236));
         JPanelBienvenida.setPreferredSize(new java.awt.Dimension(91, 700));
 
         LabelBtnInventario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -81,12 +97,39 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Facturas");
 
+        LabelBtnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         LabelBtnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cerrar-sesion-alt(1).png"))); // NOI18N
+        LabelBtnCerrarSesion.setText("Salir");
         LabelBtnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LabelBtnCerrarSesionMouseClicked(evt);
             }
         });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Ajustes");
+
+        labelBtnConfiguración.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelBtnConfiguración.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajustes.png"))); // NOI18N
+        labelBtnConfiguración.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelBtnConfiguraciónMouseClicked(evt);
+            }
+        });
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reporte-de-negocios.png"))); // NOI18N
+        jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Reportes");
 
         javax.swing.GroupLayout JPanelBienvenidaLayout = new javax.swing.GroupLayout(JPanelBienvenida);
         JPanelBienvenida.setLayout(JPanelBienvenidaLayout);
@@ -94,19 +137,30 @@ public class FarmaciaController extends javax.swing.JFrame {
             JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                 .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LabelBtnFacturas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(LabelBtnInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
-                                .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LabelBtnCerrarSesion)
-                                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                            .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                                    .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addGap(2, 2, 2)))
+                            .addComponent(LabelBtnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel4)
+                                .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(LabelBtnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addGap(0, 5, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelBienvenidaLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addComponent(LabelBtnInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         JPanelBienvenidaLayout.setVerticalGroup(
@@ -117,23 +171,33 @@ public class FarmaciaController extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
                 .addComponent(LabelBtnFacturas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
                 .addComponent(LabelBtnCerrarSesion)
-                .addContainerGap(290, Short.MAX_VALUE))
+                .addContainerGap(195, Short.MAX_VALUE))
         );
 
-        getContentPane().add(JPanelBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 700));
+        getContentPane().add(JPanelBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 90, 700));
 
         Contenedor.setBackground(new java.awt.Color(255, 255, 255));
         Contenedor.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(Contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(105, 0, 1260, 700));
+        getContentPane().add(Contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 0, 1270, 700));
+
+        getAccessibleContext().setAccessibleName("Sistema De Inventario Farmacia Yeshua");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -164,6 +228,28 @@ public class FarmaciaController extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_LabelBtnCerrarSesionMouseClicked
 
+    private void labelBtnConfiguraciónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelBtnConfiguraciónMouseClicked
+        PanelConfiguraciones configuracones = new PanelConfiguraciones();
+        configuracones.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        configuracones.setLocation(0, 0);
+        
+        Contenedor.removeAll();
+        Contenedor.add(configuracones);
+        Contenedor.revalidate();
+        Contenedor.repaint();
+    }//GEN-LAST:event_labelBtnConfiguraciónMouseClicked
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+       PanelReportes reportes = new PanelReportes();
+       reportes.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+       reportes.setLocation(0, 0);
+       
+       Contenedor.removeAll();
+        Contenedor.add(reportes);
+        Contenedor.revalidate();
+        Contenedor.repaint();
+    }//GEN-LAST:event_jLabel4MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Contenedor;
@@ -173,7 +259,11 @@ public class FarmaciaController extends javax.swing.JFrame {
     private javax.swing.JLabel LabelBtnInventario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel labelBtnConfiguración;
     // End of variables declaration//GEN-END:variables
 }
