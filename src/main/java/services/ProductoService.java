@@ -5,11 +5,12 @@
 package services;
 
 import Configurations.HibernateUtil;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.StoredProcedureQuery;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import models.Productos;
-import models.UnidadesMultiples;
 import models.ViewModels.Presentacion;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -86,9 +87,14 @@ public class ProductoService {
                 producto.setNombre(pp.getNombre());
                 producto.setIndicaciones(pp.getIndicaciones());
                 producto.setPresentacion(pp.getPresentacion());
-                producto.setMarca(pp.getMarca());
+                producto.setLaboratorio(pp.getLaboratorio());
 
                 producto.setCategoria_id(pp.getCategoria_id());
+
+                producto.setPrecioCosto(pp.getPrecioCosto());
+                producto.setCostoTotal(pp.getCostoTotal());
+                producto.setUtilidad(pp.getUtilidad());
+
                 producto.setPrecio(pp.getPrecio());
                 producto.setCantidad(pp.getCantidad());
 
@@ -130,48 +136,25 @@ public class ProductoService {
         return productos;
     }
 
-    public List<Productos> obtenerProductoByName(String clave) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction;
-        String sql = "SELECT * FROM Productos WHERE nombre LIKE :clave";
-
-        try {
-            transaction = session.beginTransaction();
-            NativeQuery<Productos> query = session.createNativeQuery(sql,
-                    Productos.class).setParameter("clave", clave + "%");
-
-            List<Productos> result = query.getResultList();
-
-            if (result.isEmpty()) {
-                throw new RuntimeException("El producto no existe o escribio mal el nombre");
-            }
-
-            transaction.commit();
-            return result;
-
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Producto no encontrado: " + e.getMessage());
-        } finally {
-            session.close();
-        }
-    }
-
     //metodos para obtener datos importantes sobre el inventario de productos
     public int obtenerCantidadProductosTotal() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction;
+        int resultado = 0;
         try {
             transaction = session.beginTransaction();
             NativeQuery<Integer> query = session.createNativeQuery("Call obtenerCantidadProductos()", Integer.TYPE);
-            Integer resultado = query.getResultList().get(0);
+            resultado = query.getResultList().get(0);
             transaction.commit();
 
-            return resultado;
         } catch (Exception e) {
-            throw new RuntimeException("Error al obtener la cantidad de productos");
+            throw new RuntimeException("No hay productos en el inventario");
+
         } finally {
             session.close();
         }
+
+        return resultado;
     }
 
     public double totalCordobasInvetario() {
@@ -254,38 +237,25 @@ public class ProductoService {
         }
     }
 
-    public String guardarUnidadMayor(UnidadesMultiples um) {
+    public int comprobarExistencias() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Transaction transaction;
+        String procedureName = "comprobarExistencias";
+
+        int resultado = 0;
 
         try {
-            transaction = session.beginTransaction();
-            session.persist(um);
-            transaction.commit();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar la unidades: " + e.getMessage());
-        } finally {
-            session.close();
-        }
+            StoredProcedureQuery query = session.createStoredProcedureQuery(procedureName);
 
-        return "Unidades multiples guardadas exitosamente";
-    }
+            // Registrar el parámetro de salida
+            query.registerStoredProcedureParameter("p_num", Integer.class, ParameterMode.OUT);
 
-    public List<UnidadesMultiples> obtenerUnidades() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+            query.execute();
 
-        String sql = "SELECT * FROM UnidadesMultiples";
-
-        List<UnidadesMultiples> resultado = new ArrayList<>();
-        try {
-            NativeQuery<UnidadesMultiples> query = session.createNativeQuery(sql,
-                    UnidadesMultiples.class);
-
-            resultado = query.getResultList();
+            resultado = (Integer) query.getOutputParameterValue("p_num");
 
         } catch (Exception e) {
-            throw new RuntimeException("Error en la base de datos");
+            throw new RuntimeException("No se obtuvo ningun valor: " + e.getMessage());
         } finally {
             session.close();
         }

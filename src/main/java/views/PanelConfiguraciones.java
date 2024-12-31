@@ -4,9 +4,12 @@
  */
 package views;
 
+import java.awt.HeadlessException;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import models.Categoria;
 import models.ViewModels.Presentacion;
 import services.CategoriaServices;
@@ -19,11 +22,24 @@ import services.UsuariosServices;
  */
 public class PanelConfiguraciones extends javax.swing.JPanel {
 
+    private DefaultTableModel model;
+    private static int UtilidadPrc = 20;
+    private static int descuentoMy = 5;
+
     /**
      * Creates new form PanelConfiguraciones
      */
     public PanelConfiguraciones() {
         initComponents();
+
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(new String[]{"Id", "Nombre", "Rol"});
+
+        jComboBoxRoles.addItem("ADMINISTRADOR");
+        jComboBoxRoles.addItem("VENDEDOR");
+        
+        obtenerDatos();
+        
         ObtenerUsuarios();
     }
 
@@ -47,17 +63,26 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         txtPasswordAdmin = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
-        txtRolAdmin = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        btnGuardarAdmin = new javax.swing.JButton();
+        btnGuardarUsuario = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaUsuarios = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtnombrePresentacion = new javax.swing.JTextField();
         btngaregarPresentacion = new javax.swing.JButton();
+        jComboBoxRoles = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        txtUtilidadConf = new javax.swing.JTextField();
+        btnEstablecerUtilidad = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtableUsuarios = new javax.swing.JTable();
+        btnEliminarUsuario = new javax.swing.JButton();
+        txtValorUtilidad = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        txtDescuentoMayor = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Bienvenido a tu panel de configuración.");
@@ -75,7 +100,7 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
         jLabel3.setText("Nombre de la Categoria");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setText("Configuraciones de Administrador");
+        jLabel4.setText("Configuraciones de usuarios");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Nombre");
@@ -85,25 +110,20 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("Contraseña");
 
-        txtRolAdmin.setText("Admin");
-        txtRolAdmin.setEnabled(false);
-
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel7.setText("Rol");
 
-        btnGuardarAdmin.setText("Guardar Admin");
-        btnGuardarAdmin.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarUsuario.setText("Guardar Usuario");
+        btnGuardarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarAdminActionPerformed(evt);
+                btnGuardarUsuarioActionPerformed(evt);
             }
         });
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("Crear Adminsitrador");
 
-        txtAreaUsuarios.setColumns(20);
-        txtAreaUsuarios.setRows(5);
-        jScrollPane1.setViewportView(txtAreaUsuarios);
-
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Agregación de presentaciones");
 
         jLabel10.setText("Nombre Presentación");
@@ -112,6 +132,57 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
         btngaregarPresentacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btngaregarPresentacionActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel11.setText("Establecer Porcentaje de Utilidad");
+
+        txtUtilidadConf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUtilidadConfActionPerformed(evt);
+            }
+        });
+
+        btnEstablecerUtilidad.setText("Establecer Utilidad");
+        btnEstablecerUtilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstablecerUtilidadActionPerformed(evt);
+            }
+        });
+
+        jtableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jtableUsuarios);
+
+        btnEliminarUsuario.setForeground(new java.awt.Color(255, 0, 0));
+        btnEliminarUsuario.setText("Eliminar Usuario");
+        btnEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarUsuarioActionPerformed(evt);
+            }
+        });
+
+        txtValorUtilidad.setEnabled(false);
+
+        jLabel12.setText("< Valor Actual");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel13.setText("Descuento en ventas mayoristas");
+
+        jButton1.setText("Establecer Descuento");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -128,48 +199,68 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(jLabel4)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel2)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(9, 9, 9)
-                                                .addComponent(jLabel3)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtNombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGap(76, 76, 76)
+                                            .addComponent(jLabel3)
+                                            .addComponent(txtNombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel10)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel10)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel9)
                                                     .addComponent(btngaregarPresentacion)
-                                                    .addComponent(txtnombrePresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addGap(0, 36, Short.MAX_VALUE))))
+                                                    .addComponent(txtnombrePresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(33, 33, 33)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel11)
+                                                        .addGap(90, 90, 90)
+                                                        .addComponent(jLabel13))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(txtUtilidadConf, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(txtValorUtilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(jLabel12))
+                                                            .addComponent(btnEstablecerUtilidad))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(txtDescuentoMayor))))))))
+                                .addGap(0, 3, Short.MAX_VALUE))))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGuardarAdmin)
-                            .addComponent(txtRolAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtPasswordAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                                .addComponent(txtNombreAdmin)))
-                        .addGap(52, 52, 52)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNombreAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtPasswordAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnEliminarUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnGuardarUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8)
+                .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -179,65 +270,97 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel10)
-                    .addComponent(txtnombrePresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(txtnombrePresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUtilidadConf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtValorUtilidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtDescuentoMayor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarCategoria)
-                    .addComponent(btngaregarPresentacion))
-                .addGap(36, 36, 36)
+                    .addComponent(btngaregarPresentacion)
+                    .addComponent(btnEstablecerUtilidad)
+                    .addComponent(jButton1))
+                .addGap(26, 26, 26)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
-                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombreAdmin))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPasswordAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel6)
+                            .addComponent(txtPasswordAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtRolAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addComponent(btnGuardarAdmin)
-                        .addContainerGap(82, Short.MAX_VALUE))
+                            .addComponent(jLabel7)
+                            .addComponent(jComboBoxRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardarUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminarUsuario)
+                        .addGap(86, 86, 86))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(16, Short.MAX_VALUE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public void ObtenerUsuarios(){
-        try {
-            List<String> nombres = new UsuariosServices().getUsuarios();
-            
-            txtAreaUsuarios.setEditable(false);
-            StringBuilder contenidoArea = new StringBuilder();
-            
-            for(String nombre: nombres){
-                contenidoArea.append(nombre).append("\n");
-            }
-            
-            txtAreaUsuarios.setText(contenidoArea.toString());
-        } catch (Exception e) {
-            txtAreaUsuarios.setText(e.getMessage());
-        }
+    public void obtenerDatos(){
+        txtValorUtilidad.setText(""+UtilidadPrc);
+        txtDescuentoMayor.setText(""+descuentoMy);
     }
     
+    public void ObtenerUsuarios() {
+        try {
+            model.setRowCount(0);
+            List<Object[]> nombres = new UsuariosServices().getUsuarios();
+
+            if (nombres != null) {
+                for (Object[] o : nombres) {
+                    String[] renglon = {String.valueOf(o[0]),
+                        String.valueOf(o[1]),
+                        String.valueOf(o[2])};
+
+                    model.addRow(renglon);
+                }
+
+                jtableUsuarios.setModel(model);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    public static int obtenerUtilidad() {
+        
+        return UtilidadPrc;
+    }
+    
+    public static int obtenerDescuento(){
+        return descuentoMy;
+    }
+
     private void btnAgregarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCategoriaActionPerformed
         if (txtNombreCategoria.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "ingrese el nombre de la categoria\n ¡por favor!");
@@ -256,7 +379,7 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
 
-    private void btnGuardarAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAdminActionPerformed
+    private void btnGuardarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarUsuarioActionPerformed
         if (txtNombreAdmin.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "Por favor ingrese un Nombre de administrador");
         } else if (txtPasswordAdmin.getPassword().length == -1) {
@@ -271,43 +394,108 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
 
                 Arrays.fill(passChars, '\u0000');
 
-                String rol = txtRolAdmin.getText();
+                String rol = jComboBoxRoles.getItemAt(jComboBoxRoles.getSelectedIndex());
 
-                String response = new UsuariosServices().crearUsuario(a_nombre, password, rol);
+                if (rol.equals("VENDEDOR")) {
+                    String response = new UsuariosServices().crearUsuario(a_nombre, "", rol);
 
-                JOptionPane.showMessageDialog(this, "a " + response);
-                
-                txtNombreAdmin.setText("");
-                txtPasswordAdmin.setText("");
-            } catch (Exception e){
+                    JOptionPane.showMessageDialog(this, response);
+
+                    txtNombreAdmin.setText("");
+                    txtPasswordAdmin.setText("");
+                } else {
+                    String response = new UsuariosServices().crearUsuario(a_nombre, password, rol);
+
+                    JOptionPane.showMessageDialog(this, response);
+
+                    txtNombreAdmin.setText("");
+                    txtPasswordAdmin.setText("");
+                }
+                ObtenerUsuarios();
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
         }
-    }//GEN-LAST:event_btnGuardarAdminActionPerformed
+    }//GEN-LAST:event_btnGuardarUsuarioActionPerformed
 
     private void btngaregarPresentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngaregarPresentacionActionPerformed
-        if(txtnombrePresentacion.getText().isBlank()){
+        if (txtnombrePresentacion.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "ingrese un nombre de producto");
         } else {
             String presentacion = txtnombrePresentacion.getText();
-            
-            
-            
+
             ProductoService ps = new ProductoService();
-            
+
             ps.ingresarPresentacion(new Presentacion(presentacion));
-            
+
             txtnombrePresentacion.setText("");
         }
     }//GEN-LAST:event_btngaregarPresentacionActionPerformed
 
+    private void txtUtilidadConfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUtilidadConfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUtilidadConfActionPerformed
+
+    private void btnEstablecerUtilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerUtilidadActionPerformed
+        try {
+            if (!txtUtilidadConf.getText().isBlank()) {
+                int utilidad = Integer.parseInt((String) txtUtilidadConf.getText());
+                UtilidadPrc = utilidad;
+                obtenerUtilidad();
+                obtenerDatos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingrese un numero por favor");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un numero correcto");
+        }
+    }//GEN-LAST:event_btnEstablecerUtilidadActionPerformed
+
+    private void btnEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuarioActionPerformed
+        int row = jtableUsuarios.getSelectedRow();
+        if(row == -1){
+            JOptionPane.showMessageDialog(this, "Por Favor Seleccione un usuario de la tabla");
+        } else {
+            try {
+                int id = Integer.parseInt((String) jtableUsuarios.getValueAt(row, 0));
+                String message = new UsuariosServices().eliminarUsuario(id);
+                JOptionPane.showMessageDialog(this, message);
+                ObtenerUsuarios();
+            } catch (HeadlessException | NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            if (!txtDescuentoMayor.getText().isBlank()) {
+                int utilidad = Integer.parseInt((String) txtDescuentoMayor.getText());
+                descuentoMy = utilidad;
+                obtenerDescuento();
+                obtenerDatos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Ingrese un numero por favor");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un numero correcto");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCategoria;
-    private javax.swing.JButton btnGuardarAdmin;
+    private javax.swing.JButton btnEliminarUsuario;
+    private javax.swing.JButton btnEstablecerUtilidad;
+    private javax.swing.JButton btnGuardarUsuario;
     private javax.swing.JButton btngaregarPresentacion;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBoxRoles;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -319,11 +507,13 @@ public class PanelConfiguraciones extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextArea txtAreaUsuarios;
+    private javax.swing.JTable jtableUsuarios;
+    private javax.swing.JTextField txtDescuentoMayor;
     private javax.swing.JTextField txtNombreAdmin;
     private javax.swing.JTextField txtNombreCategoria;
     private javax.swing.JPasswordField txtPasswordAdmin;
-    private javax.swing.JTextField txtRolAdmin;
+    private javax.swing.JTextField txtUtilidadConf;
+    private javax.swing.JTextField txtValorUtilidad;
     private javax.swing.JTextField txtnombrePresentacion;
     // End of variables declaration//GEN-END:variables
 }

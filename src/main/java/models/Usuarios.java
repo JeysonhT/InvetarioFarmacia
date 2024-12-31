@@ -39,9 +39,22 @@ public class Usuarios {
         this.contraseña = contraseña;
         this.rol = rol;
     }
+
+    public Usuarios(int id, String nombre, String rol) {
+        this.id = id;
+        this.nombre = nombre;
+        this.rol = rol;
+    }
+    
     
     public Usuarios() {
     }
+
+    @Override
+    public String toString() {
+        return nombre ;
+    }
+    
     
     
 }

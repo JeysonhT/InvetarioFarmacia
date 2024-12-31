@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePagosCreditos" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2da943ca-95c4-48ed-b76a-4f05e681aff1">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="PathImage" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id_credito" class="java.lang.Integer"/>
+	<field name="fecha_pago" class="java.sql.Date"/>
+	<field name="monto_pago" class="java.lang.Double"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="saldo_pendiente" class="java.lang.Double"/>
+	<field name="nombre_cliente" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="570" height="100" forecolor="#030303" backcolor="#0095FF" uuid="6754ea6c-7f1b-4d2a-b99b-c1c76b6e64c4">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<staticText>
+					<reportElement mode="Transparent" x="170" y="10" width="200" height="30" forecolor="#FFFFE1" uuid="64f20781-d375-4e58-853d-720718e1ad9a"/>
+					<textElement textAlignment="Center">
+						<font size="20"/>
+					</textElement>
+					<text><![CDATA[FARMACIA YESHUA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="155" y="40" width="240" height="40" forecolor="#F9F9F9" uuid="84c5d0c5-25df-42ed-bff4-a0ee106aa5ed"/>
+					<textElement textAlignment="Center">
+						<font size="14"/>
+					</textElement>
+					<text><![CDATA[San Francisco, Saliendo de Camoapa Edificio de Esquina M/D.]]></text>
+				</staticText>
+				<image>
+					<reportElement x="24" y="3" width="92" height="90" uuid="9424e66c-8d92-4625-8d7e-c598b8736d24">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<imageExpression><![CDATA[$P{PathImage}]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="177" y="2" width="207" height="30" uuid="5d1c99ae-6e21-4b44-b3dd-93b6671b2d7f"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Reporte de pagos de Creditos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-12" y="34" width="582" height="20" uuid="c79e574d-de60-48a6-aa5b-c2311952d024"/>
+				<text><![CDATA[========================================================================================================================================================]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="70" height="30" uuid="82b0d593-9205-44d8-806e-23ac2d5c5b1b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d97c8df3-f1b8-4fa2-921c-ea2d91ef97db"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Id Credito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="100" height="30" uuid="533a51c8-7817-40b7-bdf6-ff1ea26baab9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbab6d2a-a0c6-401b-82eb-9e28ff88d9af"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Fecha de Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="100" height="30" uuid="8965ec7a-1a35-4f04-acb3-020c09b58e3a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9b120832-c308-408d-8347-d65ecdc347cf"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Monto Pagado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="80" height="30" uuid="3daceed6-5cea-4d79-bb72-9bc13fc2981c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8cc9d4a-bbde-49e7-8fbd-4ad5ee30ceed"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="100" height="30" uuid="f24f119f-69c6-4f22-87d6-98128ced6713">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7778a67e-3eca-4c81-a370-99b7e07b05af"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Saldo Pendiente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="0" width="100" height="30" uuid="70d3d74c-1e38-463b-9909-a7b4e219762c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ce1cfd79-baf1-4fe1-a3c2-bfdf2728d2f8"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre Cliente]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="70" height="30" uuid="15f18bca-77e2-4d15-927f-ba27a902fb74">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d97c8df3-f1b8-4fa2-921c-ea2d91ef97db"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{id_credito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="100" height="30" uuid="9bea1666-1cb7-4116-a505-6923ac58ac98">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbab6d2a-a0c6-401b-82eb-9e28ff88d9af"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{fecha_pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="100" height="30" uuid="f1f05b10-f6f7-40f1-985c-bade96134e52">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9b120832-c308-408d-8347-d65ecdc347cf"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{monto_pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="80" height="30" uuid="5882c2b8-ca36-460d-9768-e473df76f2f7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8cc9d4a-bbde-49e7-8fbd-4ad5ee30ceed"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="100" height="30" uuid="518064c1-1fe3-47b2-98f3-1f81f7fb3de0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7778a67e-3eca-4c81-a370-99b7e07b05af"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{saldo_pendiente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="461" y="0" width="100" height="30" uuid="a0f6c226-95d1-42a3-9648-9cb8d8e6b001">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ce1cfd79-baf1-4fe1-a3c2-bfdf2728d2f8"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="-12" y="10" width="582" height="20" uuid="0a17d946-5ca3-4759-9f8d-a5355e140d6b"/>
+				<text><![CDATA[========================================================================================================================================================]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="51" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="0" width="167" height="32" uuid="973f6c82-c17f-4bc4-8c65-027784fd0aa9"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Fecha del Reporte:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="178" y="1" width="193" height="31" uuid="1a4d4ac3-e8b1-436e-9a44-e8dc2caec966"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="2" width="170" height="30" uuid="dc7aa06d-50c0-4161-b2d6-a771d7569927"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -40,7 +40,19 @@
         
         <mapping class="models.Lotes"/>
         
+        <mapping class="models.Creditos"/>
+        
         <mapping class="models.ViewModels.Presentacion"/>
+        
+        <mapping class="models.CajaModels.Caja"/>
+        
+        <mapping class="models.CajaModels.MovimientosCaja"/>
+        
+        <mapping class="models.CajaModels.Turno"/>
+        
+        <mapping class="models.Micelanea.Micelanea"/>
+        
+        <mapping class="models.Micelanea.VentasMicelanea"/>
 
     </session-factory>
     
