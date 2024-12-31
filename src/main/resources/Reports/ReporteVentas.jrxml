@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteVentas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a50fa6eb-26af-4d06-84fc-9a925cb45271">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteVentas" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a50fa6eb-26af-4d06-84fc-9a925cb45271">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="Total_cantidad" class="java.lang.Integer"/>
 	<parameter name="Total" class="java.lang.Double"/>
+	<parameter name="PathImage" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -11,17 +12,38 @@
 	<field name="totalCantidad" class="java.lang.Integer"/>
 	<field name="total_venta" class="java.lang.Double"/>
 	<field name="producto_id" class="java.lang.Integer"/>
+	<field name="tipo_Pago" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="43" splitType="Stretch">
+		<band height="93" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="562" height="90" backcolor="#00B7FF" uuid="c3fde7d0-f6ce-4f02-96c5-48c29f71d029"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="60" y="1" width="434" height="42" uuid="a13adb5e-9081-4345-90e7-ad01aa05e719"/>
+				<reportElement x="90" y="0" width="384" height="42" forecolor="#FFFFE1" uuid="a13adb5e-9081-4345-90e7-ad01aa05e719"/>
 				<textElement textAlignment="Center">
 					<font size="26"/>
 				</textElement>
 				<text><![CDATA[Farmacia YESHUA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="90" height="90" uuid="da4a949a-74a3-47cc-b644-ce4c334c6da0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{PathImage}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="157" y="45" width="240" height="40" forecolor="#F9F9F9" uuid="40703c74-e566-4d5c-a2bd-179894a0829e"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[San Francisco, Saliendo de Camoapa Edificio de Esquina M/D.]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -37,9 +59,9 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="39" splitType="Stretch">
+		<band height="49" splitType="Stretch">
 			<staticText>
-				<reportElement x="-11" y="4" width="100" height="30" uuid="54e3d8b8-4459-4490-8dc2-8d7f8854f448">
+				<reportElement x="110" y="0" width="100" height="30" uuid="54e3d8b8-4459-4490-8dc2-8d7f8854f448">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b138edc6-c8b1-4241-97fd-0b4f9e404bc7"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -48,7 +70,7 @@
 				<text><![CDATA[producto_id]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="130" y="0" width="130" height="30" uuid="7a53ab29-d6c8-461a-8dba-9a5dc87fd065">
+				<reportElement x="210" y="0" width="130" height="30" uuid="7a53ab29-d6c8-461a-8dba-9a5dc87fd065">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bbf56d8-86c0-46b3-a7c2-d61c6de330ef"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -57,7 +79,7 @@
 				<text><![CDATA[Nombre producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="110" height="30" uuid="e90f05d8-de3a-4eeb-9d1b-de47e043f5b4">
+				<reportElement x="340" y="0" width="110" height="30" uuid="e90f05d8-de3a-4eeb-9d1b-de47e043f5b4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="efbd40cd-ed3b-43e0-9716-d9e1b82671b2"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -66,7 +88,7 @@
 				<text><![CDATA[Total Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="0" width="110" height="30" uuid="fdc7cc8e-80d8-43ab-b678-6d28104094c9">
+				<reportElement x="450" y="0" width="100" height="30" uuid="fdc7cc8e-80d8-43ab-b678-6d28104094c9">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d2de0da2-8d36-4594-9796-6a9871f5b859"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -74,12 +96,21 @@
 				</textElement>
 				<text><![CDATA[Total Venta]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="30" uuid="ee362ad3-4852-461a-a5df-90323e0cb07f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b138edc6-c8b1-4241-97fd-0b4f9e404bc7"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Tipo Pago]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="38" splitType="Stretch">
 			<textField>
-				<reportElement x="-10" y="0" width="100" height="30" uuid="40621812-29b0-4290-a3ed-e1165dbc605d">
+				<reportElement x="110" y="0" width="90" height="30" uuid="40621812-29b0-4290-a3ed-e1165dbc605d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b138edc6-c8b1-4241-97fd-0b4f9e404bc7"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -88,7 +119,7 @@
 				<textFieldExpression><![CDATA[$F{producto_id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="130" y="0" width="130" height="30" uuid="a691df06-87c7-4f8d-ad1c-221fca419e71">
+				<reportElement x="212" y="0" width="130" height="30" uuid="a691df06-87c7-4f8d-ad1c-221fca419e71">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7bbf56d8-86c0-46b3-a7c2-d61c6de330ef"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -97,7 +128,7 @@
 				<textFieldExpression><![CDATA[$F{nombre_producto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="110" height="30" uuid="c17ac70f-1c9a-4a5b-9197-b3e2be4067b8">
+				<reportElement x="340" y="0" width="110" height="30" uuid="c17ac70f-1c9a-4a5b-9197-b3e2be4067b8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="efbd40cd-ed3b-43e0-9716-d9e1b82671b2"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -106,13 +137,18 @@
 				<textFieldExpression><![CDATA[$F{totalCantidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="0" width="110" height="30" uuid="ab56f122-0dcc-4e6a-805f-eb4b463f6547">
+				<reportElement x="450" y="0" width="100" height="30" uuid="ab56f122-0dcc-4e6a-805f-eb4b463f6547">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d2de0da2-8d36-4594-9796-6a9871f5b859"/>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_venta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="16345d6c-f871-41b8-a234-63ffd97019c5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipo_Pago}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -4,7 +4,6 @@
  */
 package models.ViewModels;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,7 @@ import lombok.Setter;
 @Setter
 public class VentasMes {
 
+    private String tipo_Pago;
     private int producto_id;
     private String nombre_producto;
     private int totalCantidad;
@@ -25,11 +25,14 @@ public class VentasMes {
 
     }
 
-    public VentasMes(int producto_id, String nombre_producto, int totalCantidad, double total_venta) {
+    public VentasMes(String tipoPago, int producto_id, String nombre_producto, int totalCantidad, double total_venta) {
+        this.tipo_Pago = tipoPago;
         this.producto_id = producto_id;
         this.nombre_producto = nombre_producto;
         this.totalCantidad = totalCantidad;
         this.total_venta = total_venta;
     }
+
+    
 
 }

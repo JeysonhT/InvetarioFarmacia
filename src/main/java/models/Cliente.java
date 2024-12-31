@@ -28,19 +28,22 @@ public class Cliente {
 
     private String nombre;
     private String telefono;
+    private String direccion;
 
     public Cliente() {
     }
 
-    public Cliente(int id, String nombre, String telefono) {
+    public Cliente(int id, String nombre, String telefono, String direccion) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
+        this.telefono = direccion;
     }
 
-    public Cliente(String nombre, String telefono) {
+    public Cliente(String nombre, String telefono, String direccion) {
         this.nombre = nombre;
         this.telefono = telefono;
+        this.direccion = direccion;
     }
 
     @Override

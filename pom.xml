@@ -12,6 +12,19 @@
         <exec.mainClass>com.farmacia.inventariofarmacia.InventarioFarmacia</exec.mainClass>
     </properties>
     <dependencies>
+        
+        <dependency>
+            <groupId>org.tentackle</groupId>
+            <artifactId>tentackle-swing-substance</artifactId>
+            <version>8.3.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.java.net.substance</groupId>
+                    <artifactId>substance</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> 
+        
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -118,7 +131,16 @@
                     </transformers>
                 </configuration>
             </plugin>
-            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

@@ -4,13 +4,22 @@
  */
 package views;
 
+import Utils.ImportExcel;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import models.ViewModels.VentasMes;
+import models.pagosCredito;
 import net.sf.jasperreports.engine.JRException;
+import services.Micelanea.ventasMiscelaneaServices;
+import services.PagoCreditosServices;
 import services.ReportesServices;
 import services.VentasProductosServices;
 
@@ -40,10 +49,24 @@ public class PanelReportes extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         btnReporteExistencias = new javax.swing.JButton();
         btnReporteVentas = new javax.swing.JButton();
+        btnInventarioToExcel = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        btnPagosCreditos = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        btnReporteVencimiento = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        btnReportesCreditos = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/no-hay-stock.png"))); // NOI18N
+        jLabel1.setText("Productos con existencia baja");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compras.png"))); // NOI18N
+        jLabel2.setText("Reporte de ventas del mes");
 
         btnReporteExistencias.setText("Existencia baja");
         btnReporteExistencias.addActionListener(new java.awt.event.ActionListener() {
@@ -59,33 +82,117 @@ public class PanelReportes extends javax.swing.JPanel {
             }
         });
 
+        btnInventarioToExcel.setText("Exportar inventario a excel");
+        btnInventarioToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventarioToExcelActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/metodo-de-pago.png"))); // NOI18N
+        jLabel3.setText("Reporte de pagos de creditos");
+
+        btnPagosCreditos.setText("Pagos Creditos");
+        btnPagosCreditos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagosCreditosActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fecha-de-vencimiento.png"))); // NOI18N
+        jLabel4.setText("Reporte de Productos por Vencer");
+
+        btnReporteVencimiento.setText("Reporte de Vencimientos");
+        btnReporteVencimiento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnReporteVencimientoMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/las-compras-en-linea.png"))); // NOI18N
+        jLabel5.setText("Reporte de Creditos");
+
+        btnReportesCreditos.setText("Reporte de Creditos");
+        btnReportesCreditos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesCreditosActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/maquina-de-dulces.png"))); // NOI18N
+        jLabel6.setText("Reporte de Ventas de Miscelaneas");
+
+        jButton1.setText("Reporte de Miscelaneas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnInventarioToExcel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSeparator1)
+            .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(btnReporteExistencias))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnReporteExistencias)
                     .addComponent(jLabel2)
-                    .addComponent(btnReporteVentas))
-                .addGap(155, 155, 155))
+                    .addComponent(btnReporteVentas)
+                    .addComponent(jLabel5)
+                    .addComponent(btnReportesCreditos))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel6)
+                    .addComponent(btnPagosCreditos)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(btnReporteVencimiento))
+                .addGap(0, 154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(38, 38, 38)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnReporteExistencias)
-                    .addComponent(btnReporteVentas))
-                .addContainerGap(345, Short.MAX_VALUE))
+                    .addComponent(btnPagosCreditos))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnReporteVentas)
+                    .addComponent(btnReporteVencimiento))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnReportesCreditos)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnInventarioToExcel)
+                .addGap(19, 19, 19))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -101,14 +208,15 @@ public class PanelReportes extends javax.swing.JPanel {
     }//GEN-LAST:event_btnReporteExistenciasActionPerformed
 
     private void btnReporteVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteVentasActionPerformed
-        
-        
-        Date fechaInicio = Date.valueOf(JOptionPane.showInputDialog(this, 
-                "Ingresa la Fecha de Inicio para tu reporte", 
+
+        Date fechaInicio = Date.valueOf(JOptionPane.showInputDialog(this,
+                "Ingresa la Fecha de Inicio para tu reporte",
                 "Fecha Inicial", JOptionPane.INFORMATION_MESSAGE));
-        Date fechaFin = Date.valueOf(JOptionPane.showInputDialog(this, 
-                "Ingrese la Fecha de final para tu reporte", 
+        Date fechaFin = Date.valueOf(JOptionPane.showInputDialog(this,
+                "Ingrese la Fecha de final para tu reporte",
                 "Fecha Final", JOptionPane.INFORMATION_MESSAGE));
+
+        String pathImage = "IconoFarmacia.png";
 
         try {
             List<VentasMes> ventas = new VentasProductosServices().obtenerVentaMes(fechaInicio, fechaFin);
@@ -119,6 +227,7 @@ public class PanelReportes extends javax.swing.JPanel {
 
             parametros.put("Total_cantidad", Total_cantidad);
             parametros.put("Total", total);
+            parametros.put("PathImage", pathImage);
 
             ReportesServices reportesServices = new ReportesServices();
 
@@ -130,11 +239,152 @@ public class PanelReportes extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnReporteVentasActionPerformed
 
+    private void btnInventarioToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioToExcelActionPerformed
+        ImportExcel ie = new ImportExcel();
+        try {
+            ie.crearExcel();
+        } catch (IOException ex) {
+            Logger.getLogger(PanelReportes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnInventarioToExcelActionPerformed
 
+    private void btnReporteVencimientoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteVencimientoMouseClicked
+        String pathImage = "IconoFarmacia.png";
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("PathImage", pathImage);
+            ReportesServices reportesServices = new ReportesServices();
+            reportesServices.productosPorVencer(parametros);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnReporteVencimientoMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        reporteVentasMicelanea();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnReportesCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesCreditosActionPerformed
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            String pathImage = "IconoFarmacia.png";
+
+            parametros.put("PathImage", pathImage);
+
+            ReportesServices reportesServices = new ReportesServices();
+
+            reportesServices.reporteCreditos(parametros);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnReportesCreditosActionPerformed
+
+    private void btnPagosCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosCreditosActionPerformed
+        try {
+            Date fechaInicio = Date.valueOf(JOptionPane.showInputDialog(this,
+                    "Ingresa la Fecha de Inicio para tu reporte",
+                    "Fecha Inicial", JOptionPane.INFORMATION_MESSAGE));
+            Date fechaFin = Date.valueOf(JOptionPane.showInputDialog(this,
+                    "Ingrese la Fecha de final para tu reporte",
+                    "Fecha Final", JOptionPane.INFORMATION_MESSAGE));
+
+            Map<String, Object> parametros = new HashMap<>();
+            String pathImage = "IconoFarmacia.png";
+
+            parametros.put("PathImage", pathImage);
+
+            int Total_cantidad = 0;
+            double total = 0.0;
+
+            List<Object[]> objectos = new PagoCreditosServices().ObtenerPagosCreditos(fechaInicio, fechaFin);
+            List<Map<String, Object>> campos = new ArrayList<>();
+
+            for (Object[] p : objectos) {
+                Map<String, Object> data = new HashMap<>();
+                
+                data.put("id_credito", p[1]);
+                data.put("fecha_pago", p[2]);
+                data.put("monto_pago", Double.valueOf(p[3].toString()));
+                data.put("estado", p[4]);
+                data.put("saldo_pendiente", Double.valueOf(p[5].toString()));
+                data.put("nombre_cliente", p[6]);
+                
+                campos.add(data);
+            }
+            
+            ReportesServices reportesServices = new ReportesServices();
+            
+            reportesServices.ReportePagosdelMes("/Reports/ReportePagosCreditos.jrxml", campos, parametros);
+            
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "No hay pagos de creditos registrados");
+        } catch (JRException ex) {
+            Logger.getLogger(PanelReportes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPagosCreditosActionPerformed
+
+    public void reporteVentasMicelanea() {
+        Date fechaInicio = Date.valueOf(JOptionPane.showInputDialog(this,
+                "Ingresa la Fecha de Inicio para tu reporte",
+                "Fecha Inicial", JOptionPane.INFORMATION_MESSAGE));
+        Date fechaFin = Date.valueOf(JOptionPane.showInputDialog(this,
+                "Ingrese la Fecha de final para tu reporte",
+                "Fecha Final", JOptionPane.INFORMATION_MESSAGE));
+
+        String pathImage = "IconoFarmacia.png";
+
+        try {
+            List<Object[]> ventas = new ventasMiscelaneaServices().obtenerVentaMes(fechaInicio, fechaFin);
+
+            int Total_cantidad = 0;
+            double total = 0.0;
+
+            List<Map<String, Object>> campos = new ArrayList<>();
+
+            for (Object[] v : ventas) {
+                Map<String, Object> data = new HashMap<>();
+
+                data.put("tipo_Pago", v[0]);
+                data.put("producto_id", v[1]);
+                data.put("nombre_producto", v[2]);
+                data.put("totalCantidad", new BigDecimal(v[3].toString()).intValue());
+                data.put("total_venta", v[4]);
+
+                BigDecimal numero = new BigDecimal(v[3].toString());
+                Total_cantidad += numero.intValue();
+                total += (double) v[4];
+
+                campos.add(data);
+            }
+
+            Map<String, Object> parametros = new HashMap<>();
+
+            parametros.put("Total_cantidad", Total_cantidad);
+            parametros.put("Total", total);
+            parametros.put("PathImage", pathImage);
+
+            ReportesServices reportesServices = new ReportesServices();
+
+            reportesServices.ReporteMicelaneaMes("/Reports/ReporteVentas.jrxml", campos, parametros);
+
+        } catch (JRException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInventarioToExcel;
+    private javax.swing.JButton btnPagosCreditos;
     private javax.swing.JButton btnReporteExistencias;
+    private javax.swing.JButton btnReporteVencimiento;
     private javax.swing.JButton btnReporteVentas;
+    private javax.swing.JButton btnReportesCreditos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

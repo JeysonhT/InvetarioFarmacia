@@ -29,28 +29,37 @@ public class Productos {
     private String nombre;
     private String indicaciones;
     private String presentacion;
-    private String marca;
+    private String laboratorio;
     private int categoria_id;
+
     private double precioCosto;
     private double costoTotal;
     private double utilidad;
+
     private Double precio;
     private int cantidad;
 
     public Productos() {
     }
 
-    public Productos(String nombre, int cantidad, Double precio) {
-        this.nombre = nombre;
+    public Productos(int id, int cantidad) {
+        this.id = id;
         this.cantidad = cantidad;
-        this.precio = precio;
     }
 
-    public Productos(String nombre, String indicaciones, String presentacion, String marca, int categoria_id, double precioCosto, double costoTotal, double utilidad, Double precio, int cantidad) {
+    public Productos(int id, String nombre, double precioP, int cantidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precioP;
+        this.cantidad = cantidad;
+    }
+
+    public Productos(int id, String nombre, String indicaciones, String presentacion, String laboratorio, int categoria_id, double precioCosto, double costoTotal, double utilidad, Double precio, int cantidad) {
+        this.id = id;
         this.nombre = nombre;
         this.indicaciones = indicaciones;
         this.presentacion = presentacion;
-        this.marca = marca;
+        this.laboratorio = laboratorio;
         this.categoria_id = categoria_id;
         this.precioCosto = precioCosto;
         this.costoTotal = costoTotal;
@@ -59,12 +68,11 @@ public class Productos {
         this.cantidad = cantidad;
     }
 
-    public Productos(int id, String nombre, String indicaciones, String presentacion, String marca, int categoria_id, double precioCosto, double costoTotal, double utilidad, Double precio, int cantidad) {
-        this.id = id;
+    public Productos(String nombre, String indicaciones, String presentacion, String laboratorio, int categoria_id, double precioCosto, double costoTotal, double utilidad, Double precio, int cantidad) {
         this.nombre = nombre;
         this.indicaciones = indicaciones;
         this.presentacion = presentacion;
-        this.marca = marca;
+        this.laboratorio = laboratorio;
         this.categoria_id = categoria_id;
         this.precioCosto = precioCosto;
         this.costoTotal = costoTotal;

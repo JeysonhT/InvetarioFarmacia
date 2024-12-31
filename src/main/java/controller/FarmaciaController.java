@@ -4,9 +4,13 @@
  */
 package controller;
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import views.PanelCaja;
 import views.PanelConfiguraciones;
+import views.PanelCreditos;
 import views.PanelFacturas;
 import views.PanelInventario;
 import views.PanelReportes;
@@ -16,22 +20,26 @@ import views.PanelReportes;
  * @author jason
  */
 public class FarmaciaController extends javax.swing.JFrame {
-
+    private int width;
+    private int height;
     /**
      * Creates new form FarmaciaController
      */
     public FarmaciaController() {
         initComponents();
-        
+        obtenerResolucion();
+        this.setSize(new Dimension(width, height));
+        JPanelBienvenida.setSize(91, height);
+        Contenedor.setSize(width - 91, height);
         this.setLocationRelativeTo(this.JPanelBienvenida);
         Image icono = new ImageIcon(getClass().getResource("/inventarioIcon.png")).getImage();
-        
+
         this.setIconImage(icono);
-        
+
         PanelInventario inventario = new PanelInventario();
         inventario.setSize(Contenedor.getWidth(), Contenedor.getHeight());
         inventario.setLocation(0, 0);
-        
+
         Contenedor.removeAll();
         Contenedor.add(inventario);
         Contenedor.revalidate();
@@ -53,12 +61,14 @@ public class FarmaciaController extends javax.swing.JFrame {
         LabelBtnFacturas = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         LabelBtnCerrarSesion = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        jSeparator4 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         labelBtnConfiguración = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        labelBtnCreditos = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         Contenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,7 +84,7 @@ public class FarmaciaController extends javax.swing.JFrame {
         JPanelBienvenida.setPreferredSize(new java.awt.Dimension(91, 700));
 
         LabelBtnInventario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelBtnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/alt-de-inventario.png"))); // NOI18N
+        LabelBtnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inventario.png"))); // NOI18N
         LabelBtnInventario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LabelBtnInventarioMouseClicked(evt);
@@ -82,11 +92,11 @@ public class FarmaciaController extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Inventario");
 
         LabelBtnFacturas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelBtnFacturas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/archivo-factura-dolar.png"))); // NOI18N
+        LabelBtnFacturas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/factura.png"))); // NOI18N
         LabelBtnFacturas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LabelBtnFacturasMouseClicked(evt);
@@ -98,6 +108,7 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel2.setText("Facturas");
 
         LabelBtnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        LabelBtnCerrarSesion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelBtnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cerrar-sesion-alt(1).png"))); // NOI18N
         LabelBtnCerrarSesion.setText("Salir");
         LabelBtnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -111,7 +122,7 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel3.setText("Ajustes");
 
         labelBtnConfiguración.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelBtnConfiguración.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajustes.png"))); // NOI18N
+        labelBtnConfiguración.setIcon(new javax.swing.ImageIcon(getClass().getResource("/configuraciones.png"))); // NOI18N
         labelBtnConfiguración.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labelBtnConfiguraciónMouseClicked(evt);
@@ -131,64 +142,96 @@ public class FarmaciaController extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Reportes");
 
+        labelBtnCreditos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelBtnCreditos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/colateral.png"))); // NOI18N
+        labelBtnCreditos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelBtnCreditosMouseClicked(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Creditos");
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cajero-automatico.png"))); // NOI18N
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Caja");
+
         javax.swing.GroupLayout JPanelBienvenidaLayout = new javax.swing.GroupLayout(JPanelBienvenida);
         JPanelBienvenida.setLayout(JPanelBienvenidaLayout);
         JPanelBienvenidaLayout.setHorizontalGroup(
             JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                 .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabelBtnCerrarSesion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LabelBtnFacturas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
-                                    .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.Alignment.TRAILING))
-                                    .addGap(2, 2, 2)))
-                            .addComponent(LabelBtnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel4)
-                                .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(LabelBtnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))))
-                        .addGap(0, 5, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelBienvenidaLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
-                    .addComponent(LabelBtnInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(LabelBtnInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelBienvenidaLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel1))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                                .addComponent(labelBtnCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
+            .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(17, 17, 17))
+                    .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         JPanelBienvenidaLayout.setVerticalGroup(
             JPanelBienvenidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPanelBienvenidaLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(LabelBtnInventario)
+                .addComponent(LabelBtnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
                 .addComponent(LabelBtnFacturas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
+                .addGap(13, 13, 13)
+                .addComponent(labelBtnCreditos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelBtnConfiguración, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(LabelBtnCerrarSesion)
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addGap(64, 64, 64))
         );
 
         getContentPane().add(JPanelBienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 90, 700));
@@ -197,16 +240,20 @@ public class FarmaciaController extends javax.swing.JFrame {
         Contenedor.setLayout(new java.awt.BorderLayout());
         getContentPane().add(Contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 0, 1270, 700));
 
-        getAccessibleContext().setAccessibleName("Sistema De Inventario Farmacia Yeshua");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void obtenerResolucion(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        width = screenSize.width;
+        height = screenSize.height;
+    }
+    
     private void LabelBtnFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LabelBtnFacturasMouseClicked
         PanelFacturas pFacturas = new PanelFacturas();
         pFacturas.setSize(Contenedor.getWidth(), Contenedor.getHeight());
         pFacturas.setLocation(0, 0);
-        
+
         Contenedor.removeAll();
         Contenedor.add(pFacturas);
         Contenedor.revalidate();
@@ -217,7 +264,7 @@ public class FarmaciaController extends javax.swing.JFrame {
         PanelInventario inventario = new PanelInventario();
         inventario.setSize(Contenedor.getWidth(), Contenedor.getHeight());
         inventario.setLocation(0, 0);
-        
+
         Contenedor.removeAll();
         Contenedor.add(inventario);
         Contenedor.revalidate();
@@ -232,7 +279,7 @@ public class FarmaciaController extends javax.swing.JFrame {
         PanelConfiguraciones configuracones = new PanelConfiguraciones();
         configuracones.setSize(Contenedor.getWidth(), Contenedor.getHeight());
         configuracones.setLocation(0, 0);
-        
+
         Contenedor.removeAll();
         Contenedor.add(configuracones);
         Contenedor.revalidate();
@@ -240,15 +287,37 @@ public class FarmaciaController extends javax.swing.JFrame {
     }//GEN-LAST:event_labelBtnConfiguraciónMouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-       PanelReportes reportes = new PanelReportes();
-       reportes.setSize(Contenedor.getWidth(), Contenedor.getHeight());
-       reportes.setLocation(0, 0);
-       
-       Contenedor.removeAll();
+        PanelReportes reportes = new PanelReportes();
+        reportes.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        reportes.setLocation(0, 0);
+
+        Contenedor.removeAll();
         Contenedor.add(reportes);
         Contenedor.revalidate();
         Contenedor.repaint();
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void labelBtnCreditosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelBtnCreditosMouseClicked
+        PanelCreditos pCreditos = new PanelCreditos();
+        pCreditos.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        pCreditos.setLocation(0, 0);
+
+        Contenedor.removeAll();
+        Contenedor.add(pCreditos);
+        Contenedor.revalidate();
+        Contenedor.repaint();
+    }//GEN-LAST:event_labelBtnCreditosMouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        PanelCaja pCaja = new PanelCaja();
+        pCaja.setSize(Contenedor.getWidth(), Contenedor.getHeight());
+        pCaja.setLocation(0, 0);
+        
+        Contenedor.removeAll();
+        Contenedor.add(pCaja);
+        Contenedor.revalidate();
+        Contenedor.repaint();
+    }//GEN-LAST:event_jLabel7MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -262,8 +331,10 @@ public class FarmaciaController extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel labelBtnConfiguración;
+    private javax.swing.JLabel labelBtnCreditos;
     // End of variables declaration//GEN-END:variables
 }

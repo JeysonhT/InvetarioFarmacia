@@ -33,28 +33,41 @@ public class Lotes {
 
     private Date fecha_vencimiento;
 
-    private int existencia_inicial;
+    private double existencia_inicial;
 
-    private int existencia_actual;
+    private double existencia_actual;
+    
+    private double cantidadMinima;
 
     public Lotes() {
     }
 
-    public Lotes(int id_producto, String lote, Date fecha_vencimiento, int existencia_inicial, int existencia_actual) {
-        this.id_producto = id_producto;
-        this.lote = lote;
-        this.fecha_vencimiento = fecha_vencimiento;
-        this.existencia_inicial = existencia_inicial;
-        this.existencia_actual = existencia_actual;
-    }
-
-    public Lotes(int id_lote, int id_producto, String lote, Date fecha_vencimiento, int existencia_inicial, int existencia_actual) {
+    public Lotes(int id_lote, int id_producto, String lote, Date fecha_vencimiento, double existencia_inicial, double existencia_actual, double cantidadMinima) {
         this.id_lote = id_lote;
         this.id_producto = id_producto;
         this.lote = lote;
         this.fecha_vencimiento = fecha_vencimiento;
         this.existencia_inicial = existencia_inicial;
         this.existencia_actual = existencia_actual;
+        this.cantidadMinima = cantidadMinima;
     }
+
+    public Lotes(int id_producto, String lote, Date fecha_vencimiento, double existencia_inicial, double existencia_actual, double cantidadMinima) {
+        this.id_producto = id_producto;
+        this.lote = lote;
+        this.fecha_vencimiento = fecha_vencimiento;
+        this.existencia_inicial = existencia_inicial;
+        this.existencia_actual = existencia_actual;
+        this.cantidadMinima = cantidadMinima;
+    }
+
+    public Lotes(int id_producto, String lote, Date fecha_vencimiento, double existencia_actual) {
+        this.id_producto = id_producto;
+        this.lote = lote;
+        this.fecha_vencimiento = fecha_vencimiento;
+        this.existencia_actual = existencia_actual;
+    }
+    
+    
 
 }
